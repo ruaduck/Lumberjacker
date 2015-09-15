@@ -1,0 +1,11 @@
+C:\Users\Cris\Documents\Visual Studio 2013\Projects\ScriptGUI\ScriptGUI\bin\Release\ScriptGUI.exe.config
+C:\Users\Cris\Documents\Visual Studio 2013\Projects\ScriptGUI\ScriptGUI\bin\Release\ScriptGUI.exe
+C:\Users\Cris\Documents\Visual Studio 2013\Projects\ScriptGUI\ScriptGUI\bin\Release\ScriptGUI.pdb
+C:\Users\Cris\Documents\Visual Studio 2013\Projects\ScriptGUI\ScriptGUI\bin\Release\ScriptDotNet2.dll
+C:\Users\Cris\Documents\Visual Studio 2013\Projects\ScriptGUI\ScriptGUI\bin\Release\ScriptSDK.dll
+C:\Users\Cris\Documents\Visual Studio 2013\Projects\ScriptGUI\ScriptGUI\obj\Release\ScriptGUI.csprojResolveAssemblyReference.cache
+C:\Users\Cris\Documents\Visual Studio 2013\Projects\ScriptGUI\ScriptGUI\obj\Release\ScriptGUI.Lumberjacker.resources
+C:\Users\Cris\Documents\Visual Studio 2013\Projects\ScriptGUI\ScriptGUI\obj\Release\ScriptGUI.Properties.Resources.resources
+C:\Users\Cris\Documents\Visual Studio 2013\Projects\ScriptGUI\ScriptGUI\obj\Release\ScriptGUI.csproj.GenerateResource.Cache
+C:\Users\Cris\Documents\Visual Studio 2013\Projects\ScriptGUI\ScriptGUI\obj\Release\ScriptGUI.exe
+C:\Users\Cris\Documents\Visual Studio 2013\Projects\ScriptGUI\ScriptGUI\obj\Release\ScriptGUI.pdb
