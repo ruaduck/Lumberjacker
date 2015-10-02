@@ -51,7 +51,9 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.treeareatbox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.cancelbutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Runebooktbox
@@ -252,13 +254,29 @@
             // 
             // backgroundWorker1
             // 
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            backgroundWorker1.WorkerSupportsCancellation = true;
+            backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            // 
+            // backgroundWorker2
+            // 
+            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
+            // 
+            // cancelbutton
+            // 
+            this.cancelbutton.Location = new System.Drawing.Point(164, 180);
+            this.cancelbutton.Name = "cancelbutton";
+            this.cancelbutton.Size = new System.Drawing.Size(75, 23);
+            this.cancelbutton.TabIndex = 25;
+            this.cancelbutton.Text = "Cancel";
+            this.cancelbutton.UseVisualStyleBackColor = true;
+            this.cancelbutton.Click += new System.EventHandler(this.cancelbutton_Click);
             // 
             // Lumberjacker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(293, 393);
+            
             this.Controls.Add(this.label10);
             this.Controls.Add(this.treeareatbox);
             this.Controls.Add(this.comboBox1);
@@ -313,7 +331,9 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TextBox treeareatbox;
         private System.Windows.Forms.Label label10;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        public static System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private System.Windows.Forms.Button cancelbutton;
     }
 }
 

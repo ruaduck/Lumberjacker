@@ -29,7 +29,7 @@ namespace ScriptGUI
         }
         public static Item Housecontainer;
         public Serial AxeSerial;
-        public DateTime Endtime;
+        public static DateTime Endtime;
         public static int Minutes; //Minutes to Run
         public static int Homerune; // Rune Home
         public static int Bankrune;  //  Bank Rune
@@ -45,7 +45,8 @@ namespace ScriptGUI
         public bool SetInputs()
         {
             maxweight = Stealth.Default.GetSelfMaxWeight() - 30;
-            Osi = comboBox1.Text == @"OSI";
+            Invoke((MethodInvoker)
+                delegate { Osi = comboBox1.Text == @"OSI"; });
             if (endtimebox == null || homerunebox == null || bankrunebox == null || firstrunebox == null ||
                 lastrunebox == null)
             {
@@ -59,18 +60,8 @@ namespace ScriptGUI
         }
         public void Setup()
         {
-
-            if (SetInputs())
-            {
-                RecallSetup();
-                RunebookSetup();
-                AxeSerial = AxeSetup();
-                recallstatus.Text = Travel.Recall(Runebook, Homerune, Method, Osi) ? "Recalled" : "Recall Failed";
-                ContainerSetup();
-                Lumbermethod.Unload(Housecontainer);
-                Invoke((MethodInvoker) delegate { Text = PlayerMobile.GetPlayer().Name + @" - Lumberjacker"; });
-            }
-            else MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
+            backgroundWorker2.RunWorkerAsync();
+            Controls.Add(cancelbutton);
         }
         private static void ContainerSetup()
         {
@@ -83,7 +74,7 @@ namespace ScriptGUI
         {
             Endtime = DateTime.Now.AddMinutes((Minutes));
             Start();
-            MessageBox.Show(string.Format("We have ran for {0} minutes. Thank you! ", endtimebox.Text));
+            
             
         }
 
@@ -121,7 +112,8 @@ namespace ScriptGUI
             {
                 case DialogResult.Yes:
                     axe = main.GetAxe(PlayerMobile.GetPlayer());
-                    axetextbox.Text = axe.ToString();
+                    Invoke((MethodInvoker)
+                        delegate { axetextbox.Text = axe.ToString(); });
                     break;
                 case DialogResult.No:
                     MessageBox.Show(@"Equip your Axe and start script again.");
@@ -140,7 +132,8 @@ namespace ScriptGUI
             if (runebookDialogResult == DialogResult.Yes)
             {
                 Runebook = travel.SetRunebookId();
-                Runebooktbox.Text = Runebook == 0 ? "Error" : Runebook.ToString();
+                Invoke((MethodInvoker)
+                        delegate { Runebooktbox.Text = Runebook == 0 ? "Error" : Runebook.ToString(); });
             }
             else if (runebookDialogResult == DialogResult.No)
             {
@@ -159,7 +152,7 @@ namespace ScriptGUI
             var container = Stealth.Default.ClientTargetResponse().ID;
             return container;
         }
-        private void RecallSetup()
+        private static void RecallSetup()
         {
             #region Recall Method
             var recallDialogResult =
@@ -198,27 +191,64 @@ namespace ScriptGUI
 
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
+           Lumberjackloop();
+        }
+
+        private void Lumberjackloop()
+        {
             while (Endtime > DateTime.Now)
             {
 
                 for (Runetouse = Firstrune; Runetouse < Lastrune + 1; Runetouse++)
                 {
-                    Invoke((MethodInvoker) delegate { gumptext.Text = string.Format("Recalling to spot {0}", Runetouse); }) ;
+                    Invoke((MethodInvoker)delegate { gumptext.Text = string.Format("Recalling to spot {0}", Runetouse); });
                     if (!Travel.Recall(Runebook, Runetouse, Method, Osi))
                     {
-                        recallstatus.Text = Method + @" Failed. Trying Next Rune";
-                        continue;
+                        Invoke((MethodInvoker)
+                        delegate
+                        {
+                            recallstatus.Text = Method + @" Failed. Trying Next Rune";
+                        });
+                            continue;
+                        
                     }
                     Lumbermethod.Lumberjack(AxeSerial, Treearea);
-                    if (Endtime > DateTime.Now) break;
+                    if (Endtime < DateTime.Now) backgroundWorker1.CancelAsync();
+                    if (backgroundWorker1.CancellationPending) break;
                     Invoke((MethodInvoker)
-                        delegate { gumptext.Text = "getting next rune"; }) ;
+                        delegate { gumptext.Text = "getting next rune"; });
                 }
+                if (backgroundWorker1.CancellationPending) break;
             }
             Lumbermethod.Unload(Housecontainer);
+            MessageBox.Show(string.Format("We have ran for {0} minutes. Thank you! ", endtimebox.Text));
+        }
 
+        private void backgroundWorker2_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            if (SetInputs())
+            {
+                RecallSetup();
+                RunebookSetup();
+                AxeSerial = AxeSetup();
+                Invoke((MethodInvoker)
+                    delegate
+                    {
+                        recallstatus.Text = Travel.Recall(Runebook, Homerune, Method, Osi)
+                            ? "Recalled"
+                            : "Recall Failed";
+                    });
+                ContainerSetup();
+                Lumbermethod.Unload(Housecontainer);
+                Invoke((MethodInvoker)delegate { Text = PlayerMobile.GetPlayer().Name + @" - Lumberjacker"; });
+            }
+            else MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
+        }
 
-
+        private void cancelbutton_Click(object sender, EventArgs e)
+        {
+            backgroundWorker1.CancelAsync();
+            cancelbutton.Enabled = false;
         }
     }
 
