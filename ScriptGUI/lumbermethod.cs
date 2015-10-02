@@ -37,8 +37,7 @@ namespace ScriptGUI
         private static bool Checkweight()
         {
             var weight = Stealth.Default.GetSelfWeight();
-            var maxweight = Stealth.Default.GetSelfMaxWeight() - 30;
-            return weight >= maxweight;
+            return weight >= Lumberjacker.maxweight;
         }
 
         public static void Unload(Item mycontainer)

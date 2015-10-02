@@ -39,10 +39,12 @@ namespace ScriptGUI
         public static int Runetouse; //current rune on recall
         public static uint Runebook;
         public static int Treearea; //  Area to look for tree
+        public static int maxweight;
 
 
         public bool SetInputs()
         {
+            maxweight = Stealth.Default.GetSelfMaxWeight() - 30;
             Osi = comboBox1.Text == @"OSI";
             if (endtimebox == null || homerunebox == null || bankrunebox == null || firstrunebox == null ||
                 lastrunebox == null)
@@ -80,26 +82,15 @@ namespace ScriptGUI
         private void button3_Click(object sender, EventArgs e)
         {
             Endtime = DateTime.Now.AddMinutes((Minutes));
-            Invoke((MethodInvoker) delegate { Start(); });
+            Start();
+            MessageBox.Show(string.Format("We have ran for {0} minutes. Thank you! ", endtimebox.Text));
+            
         }
 
         private void Start()
         {
-            while (Endtime > DateTime.Now)
-            {
-                for (Runetouse = Firstrune; Runetouse < Lastrune + 1; Runetouse++)
-                {
-                    if (!Travel.Recall(Runebook, Runetouse, Method, Osi))
-                    {
-                        recallstatus.Text = Method + @" Failed. Trying Next Rune";
-                        continue;
-                    }
-                    Lumbermethod.Lumberjack(AxeSerial, Treearea);
-                }
-                Lumbermethod.Unload(Housecontainer);
-            }
-            MessageBox.Show(string.Format("We have ran for {0} minutes. Thank you! ", endtimebox.Text));
-            
+            if (!backgroundWorker1.IsBusy) backgroundWorker1.RunWorkerAsync();
+                    
         }
 
         public static void Gohomeandunload()
@@ -171,8 +162,8 @@ namespace ScriptGUI
         private void RecallSetup()
         {
             #region Recall Method
-            DialogResult recallDialogResult =
-                MessageBox.Show(@"Choose whether to recall or sacred journey \n Yes = Recall \n No = Sacred Journey",
+            var recallDialogResult =
+                MessageBox.Show("Choose whether to recall or sacred journey \n Yes = Recall \n No = Sacred Journey",
                     @"Recall Method", MessageBoxButtons.YesNo);
             switch (recallDialogResult)
             {
@@ -202,6 +193,31 @@ namespace ScriptGUI
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+        }
+
+        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            while (Endtime > DateTime.Now)
+            {
+
+                for (Runetouse = Firstrune; Runetouse < Lastrune + 1; Runetouse++)
+                {
+                    Invoke((MethodInvoker) delegate { gumptext.Text = string.Format("Recalling to spot {0}", Runetouse); }) ;
+                    if (!Travel.Recall(Runebook, Runetouse, Method, Osi))
+                    {
+                        recallstatus.Text = Method + @" Failed. Trying Next Rune";
+                        continue;
+                    }
+                    Lumbermethod.Lumberjack(AxeSerial, Treearea);
+                    if (Endtime > DateTime.Now) break;
+                    Invoke((MethodInvoker)
+                        delegate { gumptext.Text = "getting next rune"; }) ;
+                }
+            }
+            Lumbermethod.Unload(Housecontainer);
+
+
 
         }
     }
