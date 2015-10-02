@@ -51,6 +51,7 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.treeareatbox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // Runebooktbox
@@ -249,6 +250,10 @@
             this.label10.TabIndex = 24;
             this.label10.Text = "Tree Area";
             // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            // 
             // Lumberjacker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -308,6 +313,7 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TextBox treeareatbox;
         private System.Windows.Forms.Label label10;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 
