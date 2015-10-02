@@ -72,10 +72,14 @@ namespace ScriptGUI
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Endtime = DateTime.Now.AddMinutes((Minutes));
-            Start();
-            
-            
+            if (SetInputs())
+            {
+                Endtime = DateTime.Now.AddMinutes((Minutes));
+                Start();
+            }
+            else MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
+
+
         }
 
         private void Start()
@@ -220,6 +224,7 @@ namespace ScriptGUI
                 }
                 if (backgroundWorker1.CancellationPending) break;
             }
+            GoHome();
             Lumbermethod.Unload(Housecontainer);
             MessageBox.Show(string.Format("We have ran for {0} minutes. Thank you! ", endtimebox.Text));
         }
