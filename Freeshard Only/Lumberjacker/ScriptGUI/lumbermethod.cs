@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ScriptDotNet2;
 using ScriptSDK;
@@ -78,6 +79,8 @@ namespace ScriptGUI
 
                 for (var i = 0; i < 25; i++) // Do 10 times or until weight full
                 {
+                    if (Lumberjacker.Endtime < DateTime.Now) Lumberjacker.backgroundWorker1.CancelAsync();
+                    if (Lumberjacker.backgroundWorker1.CancellationPending) break;
                     if (Checkweight())
                     {
                         Lumberjacker.Gohomeandunload();
@@ -89,9 +92,12 @@ namespace ScriptGUI
                     Stealth.Default.Wait(1000); //wait 1 second
                     var journal = JournalHelper.GetJournal();
                     if (journal.LastMessage.Contains("not enough wood ") || journal.LastMessage.Contains("cannot be seen")) break;
+
                     if (!Checkweight()) continue;
                     LogToBoard(myaxe);
                 }
+                if (Lumberjacker.Endtime < DateTime.Now) Lumberjacker.backgroundWorker1.CancelAsync();
+                if (Lumberjacker.backgroundWorker1.CancellationPending) break;
             }
         }
 
