@@ -61,19 +61,19 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>HqwSBwih4SmDn1FbgxoU4iiMyA9z/KhCH1x5awDQWwI=</dsig:DigestValue>
+        <dsig:DigestValue>D2ESWRhgIjAl/6lvooVtVlX4XOuvIxKpkaM03sg/KYU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScriptSDK.dll" size="323584">
-      <assemblyIdentity name="ScriptSDK" version="1.0.3.35018" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScriptSDK.dll" size="297472">
+      <assemblyIdentity name="ScriptSDK" version="1.0.3.20978" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>6FSnPJ39lwJ7aRTOoINcnFLl+ktqr9avyO8HkMvK0Wo=</dsig:DigestValue>
+        <dsig:DigestValue>dVnglnMgfeL15EzW7ghxdTkPom+6kG6XWFuwSWbSPEE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

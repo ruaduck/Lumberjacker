@@ -8,10 +8,12 @@
 //////////////////////////////////////////////////////////////////////////
 
 using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
-using ScriptDotNet2;
+using ScriptGUI.Properties;
 using ScriptSDK;
+using ScriptSDK.API;
 using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
 
@@ -23,9 +25,11 @@ namespace ScriptGUI
 
         public Lumberjacker()
         {
-            
+            Stealth.Client.ClilocSpeech += OnClilocSpeech;
             InitializeComponent();
-                       
+            cancelbutton.Enabled = false;
+            lumberjackbutton.Enabled = false;
+
         }
         public static Item Housecontainer;
         public Serial AxeSerial;
@@ -39,12 +43,24 @@ namespace ScriptGUI
         public static int Runetouse; //current rune on recall
         public static uint Runebook;
         public static int Treearea; //  Area to look for tree
-        public static int maxweight;
+        public static int Maxweight;
+        public static bool Speechhit;
 
+        private static void OnClilocSpeech(object sender, ClilocSpeechEventArgs e)
+        {
+            switch (e.Text)
+            {
+                case "There's not enough wood here to harvest.":
+                    Speechhit = true;
+                    break;
 
+                default:
+                    break;
+            }
+        }
         public bool SetInputs()
         {
-            maxweight = Stealth.Default.GetSelfMaxWeight() - 30;
+            Maxweight = Stealth.Client.GetSelfMaxWeight() - 30;
             Invoke((MethodInvoker)
                 delegate { Osi = comboBox1.Text == @"OSI"; });
             if (endtimebox == null || homerunebox == null || bankrunebox == null || firstrunebox == null ||
@@ -76,6 +92,8 @@ namespace ScriptGUI
             {
                 Endtime = DateTime.Now.AddMinutes((Minutes));
                 Start();
+                cancelbutton.Enabled = true;
+                lumberjackbutton.Enabled = false;
             }
             else MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
 
@@ -109,7 +127,7 @@ namespace ScriptGUI
         private Serial AxeSetup()
         {
             Serial axe = null;
-            Lumbermethod main = new Lumbermethod();
+            var main = new Lumbermethod();
             #region Get Axe Info
             DialogResult axedialogResult = MessageBox.Show(@"Do you have your Axe Equipped?", @"Getting Axe ID", MessageBoxButtons.YesNo);
             switch (axedialogResult)
@@ -148,19 +166,19 @@ namespace ScriptGUI
         }
         private static uint Getcontainer()
         {
-            Stealth.Default.ClientRequestObjectTarget();
-            while (!Stealth.Default.ClientTargetResponsePresent())
+            Stealth.Client.ClientRequestObjectTarget();
+            while (!Stealth.Client.ClientTargetResponsePresent())
             {
                 Thread.Sleep(50);
             }
-            var container = Stealth.Default.ClientTargetResponse().ID;
+            var container = Stealth.Client.ClientTargetResponse().ID;
             return container;
         }
         private static void RecallSetup()
         {
             #region Recall Method
             var recallDialogResult =
-                MessageBox.Show("Choose whether to recall or sacred journey \n Yes = Recall \n No = Sacred Journey",
+                MessageBox.Show(Resources.Lumberjacker_RecallSetup_,
                     @"Recall Method", MessageBoxButtons.YesNo);
             switch (recallDialogResult)
             {
@@ -176,6 +194,11 @@ namespace ScriptGUI
         }
 
         #endregion
+
+        public void Updatelogamounts()
+        {
+
+        }
         public string GetMethod()
         {
             return Method;
@@ -184,8 +207,8 @@ namespace ScriptGUI
         private void startsetup_Click(object sender, EventArgs e)
         {
             Setup();
-            Controls.Remove(startsetup);
-            Controls.Add(lumberjackbutton);
+            startsetup.Enabled = false;
+            
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -193,7 +216,7 @@ namespace ScriptGUI
 
         }
 
-        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
            Lumberjackloop();
         }
@@ -220,16 +243,18 @@ namespace ScriptGUI
                     if (Endtime < DateTime.Now) backgroundWorker1.CancelAsync();
                     if (backgroundWorker1.CancellationPending) break;
                     Invoke((MethodInvoker)
-                        delegate { gumptext.Text = "getting next rune"; });
+                        delegate { gumptext.Text = @"getting next rune"; });
                 }
                 if (backgroundWorker1.CancellationPending) break;
             }
             GoHome();
             Lumbermethod.Unload(Housecontainer);
             MessageBox.Show(string.Format("We have ran for {0} minutes. Thank you! ", endtimebox.Text));
+            Invoke((MethodInvoker)
+                delegate { lumberjackbutton.Enabled = true; });
         }
 
-        private void backgroundWorker2_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
             if (SetInputs())
             {
@@ -245,7 +270,9 @@ namespace ScriptGUI
                     });
                 ContainerSetup();
                 Lumbermethod.Unload(Housecontainer);
-                Invoke((MethodInvoker)delegate { Text = PlayerMobile.GetPlayer().Name + @" - Lumberjacker"; });
+                Invoke((MethodInvoker)delegate { Text = PlayerMobile.GetPlayer().Name + @" - Lumberjacker";
+                lumberjackbutton.Enabled = true;
+                });
             }
             else MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
         }
@@ -254,6 +281,20 @@ namespace ScriptGUI
         {
             backgroundWorker1.CancelAsync();
             cancelbutton.Enabled = false;
+            lumberjackbutton.Enabled = true;
+        }
+
+        private void backgroundWorker3_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Invoke((MethodInvoker) delegate
+            {
+                oakbox.Text = Lumbermethod.Oak.ToString();
+                ashbox.Text = Lumbermethod.Ash.ToString();
+                yewbox.Text = Lumbermethod.Yew.ToString();
+                hwbox.Text = Lumbermethod.Hw.ToString();
+                bloodbox.Text = Lumbermethod.Blood.ToString();
+                regbox.Text = Lumbermethod.Reg.ToString();
+            });
         }
     }
 
