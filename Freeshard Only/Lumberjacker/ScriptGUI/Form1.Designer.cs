@@ -32,7 +32,6 @@
             this.recallstatus = new System.Windows.Forms.TextBox();
             this.lumberjackbutton = new System.Windows.Forms.Button();
             this.axetextbox = new System.Windows.Forms.TextBox();
-            this.gumptext = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -68,6 +67,7 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
+            this.gumptext = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // Runebooktbox
@@ -103,14 +103,6 @@
             this.axetextbox.ReadOnly = true;
             this.axetextbox.Size = new System.Drawing.Size(100, 22);
             this.axetextbox.TabIndex = 5;
-            // 
-            // gumptext
-            // 
-            this.gumptext.Location = new System.Drawing.Point(49, 133);
-            this.gumptext.Name = "gumptext";
-            this.gumptext.ReadOnly = true;
-            this.gumptext.Size = new System.Drawing.Size(100, 22);
-            this.gumptext.TabIndex = 6;
             // 
             // label1
             // 
@@ -289,6 +281,7 @@
             // 
             this.regbox.Location = new System.Drawing.Point(199, 213);
             this.regbox.Name = "regbox";
+            this.regbox.ReadOnly = true;
             this.regbox.Size = new System.Drawing.Size(64, 22);
             this.regbox.TabIndex = 26;
             // 
@@ -296,6 +289,7 @@
             // 
             this.oakbox.Location = new System.Drawing.Point(199, 242);
             this.oakbox.Name = "oakbox";
+            this.oakbox.ReadOnly = true;
             this.oakbox.Size = new System.Drawing.Size(64, 22);
             this.oakbox.TabIndex = 27;
             // 
@@ -303,6 +297,7 @@
             // 
             this.ashbox.Location = new System.Drawing.Point(199, 271);
             this.ashbox.Name = "ashbox";
+            this.ashbox.ReadOnly = true;
             this.ashbox.Size = new System.Drawing.Size(64, 22);
             this.ashbox.TabIndex = 28;
             // 
@@ -310,6 +305,7 @@
             // 
             this.yewbox.Location = new System.Drawing.Point(199, 300);
             this.yewbox.Name = "yewbox";
+            this.yewbox.ReadOnly = true;
             this.yewbox.Size = new System.Drawing.Size(64, 22);
             this.yewbox.TabIndex = 29;
             // 
@@ -317,6 +313,7 @@
             // 
             this.bloodbox.Location = new System.Drawing.Point(199, 328);
             this.bloodbox.Name = "bloodbox";
+            this.bloodbox.ReadOnly = true;
             this.bloodbox.Size = new System.Drawing.Size(64, 22);
             this.bloodbox.TabIndex = 30;
             // 
@@ -324,6 +321,7 @@
             // 
             this.hwbox.Location = new System.Drawing.Point(199, 359);
             this.hwbox.Name = "hwbox";
+            this.hwbox.ReadOnly = true;
             this.hwbox.Size = new System.Drawing.Size(64, 22);
             this.hwbox.TabIndex = 31;
             // 
@@ -394,6 +392,14 @@
             // 
             backgroundWorker3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker3_DoWork);
             // 
+            // gumptext
+            // 
+            this.gumptext.Location = new System.Drawing.Point(49, 133);
+            this.gumptext.Name = "gumptext";
+            this.gumptext.ReadOnly = true;
+            this.gumptext.Size = new System.Drawing.Size(100, 22);
+            this.gumptext.TabIndex = 6;
+            // 
             // Lumberjacker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -449,7 +455,6 @@
         public System.Windows.Forms.TextBox recallstatus;
         private System.Windows.Forms.Button lumberjackbutton;
         public System.Windows.Forms.TextBox axetextbox;
-        public System.Windows.Forms.TextBox gumptext;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -477,13 +482,14 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
-        public static System.ComponentModel.BackgroundWorker backgroundWorker3;
         public System.Windows.Forms.TextBox regbox;
         public System.Windows.Forms.TextBox oakbox;
         public System.Windows.Forms.TextBox ashbox;
         public System.Windows.Forms.TextBox yewbox;
         public System.Windows.Forms.TextBox bloodbox;
         public System.Windows.Forms.TextBox hwbox;
+        public System.Windows.Forms.TextBox gumptext;
+        public static System.ComponentModel.BackgroundWorker backgroundWorker3;
         public static System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }

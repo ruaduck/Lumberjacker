@@ -77,7 +77,6 @@ namespace ScriptGUI
         public void Setup()
         {
             backgroundWorker2.RunWorkerAsync();
-            Controls.Add(cancelbutton);
         }
         private static void ContainerSetup()
         {
@@ -206,8 +205,9 @@ namespace ScriptGUI
 
         private void startsetup_Click(object sender, EventArgs e)
         {
-            Setup();
             startsetup.Enabled = false;
+            Setup();
+            
             
         }
 
@@ -270,11 +270,19 @@ namespace ScriptGUI
                     });
                 ContainerSetup();
                 Lumbermethod.Unload(Housecontainer);
-                Invoke((MethodInvoker)delegate { Text = PlayerMobile.GetPlayer().Name + @" - Lumberjacker";
-                lumberjackbutton.Enabled = true;
+                Invoke((MethodInvoker) delegate
+                {
+                    Text = PlayerMobile.GetPlayer().Name + @" - Lumberjacker";
+                    lumberjackbutton.Enabled = true;
+
                 });
             }
-            else MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
+
+            else
+            {
+                startsetup.Enabled = true; 
+                MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
+            }
         }
 
         private void cancelbutton_Click(object sender, EventArgs e)

@@ -52,7 +52,8 @@ namespace ScriptGUI
         public static void Unload(Item mycontainer)
         {
             Stealth.Client.Wait(1000);
-            Setvariables();
+            //Setvariables();
+            Stealth.Client.newMoveXY((ushort)mycontainer.Location.X, (ushort)mycontainer.Location.Y, true, 1, true);
             mycontainer.DoubleClick();
             Stealth.Client.Wait(1000);
             var logs = Scanner.Find<Item>((ushort) Logs, 0xFFFF, Stealth.Client.GetBackpackID(), true);

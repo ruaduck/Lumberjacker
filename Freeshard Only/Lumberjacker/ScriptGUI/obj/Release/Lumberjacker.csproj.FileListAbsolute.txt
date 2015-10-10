@@ -3,8 +3,8 @@ C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGU
 C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\bin\Release\ScriptGUI.application
 C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\bin\Release\ScriptGUI.exe
 C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\bin\Release\ScriptGUI.pdb
-C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\bin\Release\ScriptDotNet2.dll
 C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\bin\Release\ScriptSDK.dll
+C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\obj\Release\Lumberjacker.csprojResolveAssemblyReference.cache
 C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\obj\Release\ScriptGUI.Lumberjacker.resources
 C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\obj\Release\ScriptGUI.Properties.Resources.resources
 C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\obj\Release\Lumberjacker.csproj.GenerateResource.Cache
@@ -12,4 +12,3 @@ C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGU
 C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\obj\Release\ScriptGUI.application
 C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\obj\Release\ScriptGUI.exe
 C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\obj\Release\ScriptGUI.pdb
-C:\Users\Cris\Desktop\Tidus Stealth Scripts\Freeshard Only\Lumberjacker\ScriptGUI\obj\Release\Lumberjacker.csprojResolveAssemblyReference.cache
