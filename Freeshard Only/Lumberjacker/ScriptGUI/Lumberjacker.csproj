@@ -61,9 +61,6 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ScriptDotNet2">
-      <HintPath>..\..\..\..\..\Desktop\Stealth\ScriptDotNet2.dll</HintPath>
-    </Reference>
     <Reference Include="ScriptSDK">
       <HintPath>..\..\..\..\..\Desktop\Stealth\ScriptSDK.dll</HintPath>
     </Reference>
@@ -100,6 +97,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Lumberjacker_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
