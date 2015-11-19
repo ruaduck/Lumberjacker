@@ -41,7 +41,7 @@ namespace ScriptGUI
         public static int Lastrune; // Last Lumberjacking Rune
         public static bool Osi; // OSI = True; RebirthUO = False;
         public static int Runetouse; //current rune on recall
-        public static uint Runebook;
+        public static Item Runebook;
         public static int Treearea; //  Area to look for tree
         public static int Maxweight;
         public static bool Speechhit;
@@ -81,7 +81,7 @@ namespace ScriptGUI
         private static void ContainerSetup()
         {
             MessageBox.Show(@"Select your Container");
-            Housecontainer = new Item(new Serial(Getcontainer()));
+            Housecontainer = new Item(new Serial(Getitem()));
             Housecontainer.DoubleClick();
         }
 
@@ -145,33 +145,35 @@ namespace ScriptGUI
 
             #endregion
         }
-        private void RunebookSetup()
+        private static void RunebookSetup()
         {
-            Travel travel = new Travel();
+            MessageBox.Show(@"Select your Runebook");
+            Runebook = new Item(new Serial(Getitem()));
+            //Travel travel = new Travel();
             #region Get Runebook Info
-            DialogResult runebookDialogResult = MessageBox.Show(@"Do you have only 1 runebook in your backpack?", @"Getting Axe ID", MessageBoxButtons.YesNo);
-            if (runebookDialogResult == DialogResult.Yes)
-            {
-                Runebook = travel.SetRunebookId();
-                Invoke((MethodInvoker)
-                        delegate { Runebooktbox.Text = Runebook == 0 ? "Error" : Runebook.ToString(); });
-            }
-            else if (runebookDialogResult == DialogResult.No)
-            {
-                MessageBox.Show(@"Get your runebooks correct and start script again.");
-                Close();
-            }
+            //DialogResult runebookDialogResult = MessageBox.Show(@"Do you have only 1 runebook in your backpack?", @"Getting Axe ID", MessageBoxButtons.YesNo);
+            //if (runebookDialogResult == DialogResult.Yes)
+            //{
+            //    Runebook = travel.SetRunebookId();
+            //    Invoke((MethodInvoker)
+            //            delegate { Runebooktbox.Text = Runebook == 0 ? "Error" : Runebook.ToString(); });
+            //}
+            //else if (runebookDialogResult == DialogResult.No)
+            //{
+            //    MessageBox.Show(@"Get your runebooks correct and start script again.");
+            //    Close();
+            //}
             #endregion
         }
-        private static uint Getcontainer()
+        private static uint Getitem()
         {
             Stealth.Client.ClientRequestObjectTarget();
             while (!Stealth.Client.ClientTargetResponsePresent())
             {
                 Thread.Sleep(50);
             }
-            var container = Stealth.Client.ClientTargetResponse().ID;
-            return container;
+            var myitem = Stealth.Client.ClientTargetResponse().ID;
+            return myitem;
         }
         private static void RecallSetup()
         {

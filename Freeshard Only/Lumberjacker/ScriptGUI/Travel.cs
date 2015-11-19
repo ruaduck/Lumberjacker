@@ -12,15 +12,14 @@ namespace ScriptGUI
     class Travel
     {
 
-        public static bool Recall(uint runebookserial, int bookspot, string recalltype, bool osi)
+        public static bool Recall(Item runebookserial, int bookspot, string recalltype, bool osi)
         {
             Gump runegump;
             var loc1 = PlayerMobile.GetPlayer().Location;// LOC before recall
-            var myItem = new UOEntity(new Serial(runebookserial)); //replace later with ID you want!
-            myItem.DoubleClick(); // Open Runebook
+            runebookserial.DoubleClick(); // Open Runebook
             Stealth.Client.Wait(1000);
-            if (!osi) { runegump = GetRunebookGump(0x554B87F3, myItem.Serial.Value); } // Choose gump as Runebook Gump
-            else { runegump = GetRunebookGump(0x0059, myItem.Serial.Value); }
+            if (!osi) { runegump = GetRunebookGump(0x554B87F3, runebookserial.Serial.Value); } // Choose gump as Runebook Gump
+            else { runegump = GetRunebookGump(0x0059, runebookserial.Serial.Value); }
             var recall = bookspot*6 - 1;
             var sj = bookspot*6 + 1;
             var recallosi = bookspot + 49;
