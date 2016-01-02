@@ -1,4 +1,4 @@
-﻿namespace ScriptGUI
+﻿namespace TLumberjack
 {
     partial class Lumberjacker
     {
