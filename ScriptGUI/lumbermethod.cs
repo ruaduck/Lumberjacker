@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using ScriptSDK;
 using ScriptSDK.API;
 using ScriptSDK.Attributes;
@@ -8,6 +9,7 @@ using ScriptSDK.Data;
 using ScriptSDK.Engines;
 using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
+using ScriptSDK.Targets;
 
 namespace ScriptGUI
 {
@@ -19,15 +21,19 @@ namespace ScriptGUI
         public static int Yew;
         public static int Hw;
         public static int Blood;
-        public static string Journal;
+        public static int Frost;
+        public static int Amber;
+        public static int Bark;
+        public static int Switch;
+        public static int Plant;
+        public static int Fungi;
         public static uint Boards = 0x1BD7;
         public static uint Logs = 0x1BDD;
         public static List<ushort> Extras = new List<ushort>();
-        public static ushort[] Hues;
-
+        public static UOEntity Theaxe;
+        public static int weight;
         public static void Setvariables()
         {
-            Hues = new ushort[]{0x0, 0x7DA, 0x4A7, 0x4A8, 0x4A9, 0x4AA};// Reg,Oak,Ash,Yew,Heartwood,Bloodwood
             Extras.Add(0x3191); //Fungi
             Extras.Add(0x318f); //Bark
             Extras.Add(0x2F5F); //Switch
@@ -35,91 +41,152 @@ namespace ScriptGUI
             Extras.Add(0x3199); //Amber
             
         }
-        private static void LogToBoard(UOEntity myaxe)
+        private static void LogToBoard()
         {
-            var targethelper = TargetHelper.GetTarget();
+            Stealth.Client.AddToSystemJournal("Converting Logs to boards");
             var logs = Scanner.Find<Item>((ushort)Logs, 0xFFFF, Stealth.Client.GetBackpackID(), true);
-            foreach (var log in logs.Where(log => (myaxe.DoubleClick()) && (targethelper.WaitForTarget(2000))))
-                Stealth.Client.TargetToObject(log.Serial.Value);
-            
+            foreach (var log in logs)
+            {
+                var player = PlayerMobile.GetPlayer();
+                player.Paperdoll.TwoHanded.DoubleClick();
+                var target = new EntityTarget(player,1000);
+                target.Action(log);               
+            }
         }
         private static bool Checkweight()
         {
-            var weight = Stealth.Client.GetSelfWeight();
+
+            weight = Stealth.Client.GetSelfWeight();
+            if (weight < Lumberjacker.Maxweight) return weight >= Lumberjacker.Maxweight;
+            LogToBoard();
+            weight = Stealth.Client.GetSelfWeight();
             return weight >= Lumberjacker.Maxweight;
         }
 
         public static void Unload(Item mycontainer)
         {
             Stealth.Client.Wait(1000);
-            //Setvariables();
+            Setvariables();
             Stealth.Client.newMoveXY((ushort)mycontainer.Location.X, (ushort)mycontainer.Location.Y, true, 1, true);
-            mycontainer.DoubleClick();
-            Stealth.Client.Wait(1000);
             var logs = Scanner.Find<Item>((ushort) Logs, 0xFFFF, Stealth.Client.GetBackpackID(), true);
             foreach (var log in logs)
             {
-                Stealth.Client.MoveItem(log.Serial.Value, log.Amount, mycontainer.Serial.Value, 0, 0, 0);
-                Stealth.Client.Wait(1000);
-                switch (log.Color)
+                var color = Stealth.Client.GetColor(log.Serial.Value);
+                switch (color)
                 {
+                    case 0x0:
+                        Reg += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Regular Logs");
+                        break;
                     case 0x7DA:
                         Oak += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Oak Logs");
                         break;
                     case 0x4A7:
                         Ash += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Ash Logs");
                         break;
                     case 0x4A8:
                         Yew += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Yew Logs");
                         break;
                     case 0x4A9:
                         Hw += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Heartwood Logs");
                         break;
                     case 0x4AA:
                         Blood += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Bloodwood Logs");
                         break;
-                    default:
-                        Reg += log.Amount;
+                    case 0x047F:
+                        Frost += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Frostwood Logs");
                         break;
                 }
-
+                Stealth.Client.MoveItem(log.Serial.Value, log.Amount, mycontainer.Serial.Value, 0, 0, 0);
+                Stealth.Client.Wait(1000);
+                while (Lumberjacker.Actionperform)
+                    moveagain(log, mycontainer);
             }
             var board = Scanner.Find<Item>((ushort)Boards, 0xFFFF, Stealth.Client.GetBackpackID(), true);
             foreach (var log in board)
             {
-                Stealth.Client.MoveItem(log.Serial.Value, log.Amount, mycontainer.Serial.Value, 0, 0, 0);
-                Stealth.Client.Wait(1000);
-                switch (log.Color)
+
+                switch ((uint)log.Color)
                 {
+                    case 0x0:
+                        Reg += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Regular Boards");
+                        break;
                     case 0x7DA:
                         Oak += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Oak Boards");
                         break;
                     case 0x4A7:
                         Ash += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Ash Boards");
                         break;
                     case 0x4A8:
                         Yew += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Yew Boards");
                         break;
                     case 0x4A9:
                         Hw += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Heartwood Boards");
                         break;
                     case 0x4AA:
                         Blood += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Bloodwood Boards");
                         break;
-                    default:
-                        Reg += log.Amount;
+                    case 0x047F:
+                        Frost += log.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Frostwood Boards");
                         break;
                 }
-
-            }
-            foreach (var move in Extras.Select(extra => Scanner.Find<Item>(extra, 0xFFFF, Stealth.Client.GetBackpackID(), true)).SelectMany(moves => moves))
-            {
-                Stealth.Client.MoveItem(move.Serial.Value, move.Amount, mycontainer.Serial.Value, 0, 0, 0);
+                Stealth.Client.MoveItem(log.Serial.Value, log.Amount, mycontainer.Serial.Value, 0, 0, 0);
                 Stealth.Client.Wait(1000);
+                while (Lumberjacker.Actionperform)
+                    moveagain(log, mycontainer);
             }
-            Lumberjacker.backgroundWorker3.RunWorkerAsync();
+            foreach (var item1 in Extras.Select(extra => ushort.Parse(extra.ToString())).Select(move => Scanner.Find<Item>(move, 0xFFFF, Stealth.Client.GetBackpackID(), true)).SelectMany(item => item))
+            {
+                switch (item1.ObjectType)
+                {
+                    case 0x3191:
+                        Fungi += item1.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Luminscent Fungi");
+                        break;
+                    case 0x318f: //Bark
+                        Bark += item1.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Bark");
+                        break;
+                    case 0x2F5F: //Switch
+                        Switch += item1.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Switch");
+                        break;
+                    case 0x3190: //Plant
+                        Plant += item1.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Parasitic Plant");
+                        break;
+                    case 0x3199: //Amber
+                        Amber += item1.Amount;
+                        Stealth.Client.AddToSystemJournal("Dropping off Amber");
+                        break;
+                }
+                Stealth.Client.MoveItem(item1.Serial.Value, item1.Amount, mycontainer.Serial.Value, 0, 0, 0);
+                Stealth.Client.Wait(1000);
+                while (Lumberjacker.Actionperform)
+                    moveagain(item1, mycontainer);
+            }
+            if (Lumberjacker.backgroundWorker3 != null) Lumberjacker.backgroundWorker3.RunWorkerAsync();
         }
 
+        public static void moveagain(Item item, Item container)
+        {
+            Lumberjacker.Actionperform = false;
+            Stealth.Client.MoveItem(item.Serial.Value, item.Amount, container.Serial.Value, 0, 0, 0);
+            Stealth.Client.Wait(1100);
+        }
         public static void Lumberjack(Serial axeserial, int distance)
         {
             var myaxe = new UOEntity(new Serial(axeserial.Value));
@@ -145,10 +212,7 @@ namespace ScriptGUI
                     if (!Lumberjacker.Speechhit) continue;
                     Lumberjacker.Speechhit = false;
                     break;
-                    //Journal = JournalHelper.GetJournal().LastMessage;
-                    //if (Journal.Contains("not enough wood ") || Journal.Contains("cannot be seen")) break;
                 }
-                LogToBoard(myaxe);
                 if (Lumberjacker.Endtime < DateTime.Now) Lumberjacker.backgroundWorker1.CancelAsync();
                 if (Lumberjacker.backgroundWorker1.CancellationPending) break;
             }
@@ -156,8 +220,9 @@ namespace ScriptGUI
 
         public Serial GetAxe(PlayerMobile mobile)
         {
-            var axe = mobile.Paperdoll.TwoHanded;
-            return axe.Serial;
+            Theaxe = mobile.Paperdoll.TwoHanded;
+            return Theaxe.Serial;
         }
     }
+    
 }

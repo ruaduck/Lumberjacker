@@ -50,8 +50,9 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.treeareatbox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.cancelbutton = new System.Windows.Forms.Button();
             this.regbox = new System.Windows.Forms.TextBox();
             this.oakbox = new System.Windows.Forms.TextBox();
@@ -66,13 +67,28 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
-            backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
-            this.gumptext = new System.Windows.Forms.TextBox();
+            this.frostbox = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.avghr = new System.Windows.Forms.Label();
+            this.statustext = new System.Windows.Forms.TextBox();
+            this.savebutton = new System.Windows.Forms.Button();
+            this.loadbutton = new System.Windows.Forms.Button();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.barkbox = new System.Windows.Forms.TextBox();
+            this.switchbox = new System.Windows.Forms.TextBox();
+            this.fungibox = new System.Windows.Forms.TextBox();
+            this.plantbox = new System.Windows.Forms.TextBox();
+            this.amberbox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // Runebooktbox
             // 
-            this.Runebooktbox.Location = new System.Drawing.Point(49, 74);
+            this.Runebooktbox.Location = new System.Drawing.Point(144, 70);
             this.Runebooktbox.Name = "Runebooktbox";
             this.Runebooktbox.ReadOnly = true;
             this.Runebooktbox.Size = new System.Drawing.Size(100, 22);
@@ -80,7 +96,7 @@
             // 
             // recallstatus
             // 
-            this.recallstatus.Location = new System.Drawing.Point(196, 133);
+            this.recallstatus.Location = new System.Drawing.Point(291, 129);
             this.recallstatus.Name = "recallstatus";
             this.recallstatus.ReadOnly = true;
             this.recallstatus.Size = new System.Drawing.Size(100, 22);
@@ -98,7 +114,7 @@
             // 
             // axetextbox
             // 
-            this.axetextbox.Location = new System.Drawing.Point(196, 74);
+            this.axetextbox.Location = new System.Drawing.Point(291, 70);
             this.axetextbox.Name = "axetextbox";
             this.axetextbox.ReadOnly = true;
             this.axetextbox.Size = new System.Drawing.Size(100, 22);
@@ -107,16 +123,16 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(49, 109);
+            this.label1.Location = new System.Drawing.Point(144, 105);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(63, 17);
+            this.label1.Size = new System.Drawing.Size(48, 17);
             this.label1.TabIndex = 7;
-            this.label1.Text = "Gump ID";
+            this.label1.Text = "Status";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(49, 51);
+            this.label2.Location = new System.Drawing.Point(144, 47);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(90, 17);
             this.label2.TabIndex = 8;
@@ -125,7 +141,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(193, 51);
+            this.label3.Location = new System.Drawing.Point(288, 47);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(48, 17);
             this.label3.TabIndex = 9;
@@ -134,7 +150,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(196, 109);
+            this.label4.Location = new System.Drawing.Point(291, 105);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(122, 17);
             this.label4.TabIndex = 10;
@@ -156,6 +172,7 @@
             this.endtimebox.Name = "endtimebox";
             this.endtimebox.Size = new System.Drawing.Size(45, 22);
             this.endtimebox.TabIndex = 12;
+            this.endtimebox.TextChanged += new System.EventHandler(this.endtimebox_TextChanged);
             // 
             // label5
             // 
@@ -236,7 +253,7 @@
             this.comboBox1.Items.AddRange(new object[] {
             "OSI",
             "RebirthUO"});
-            this.comboBox1.Location = new System.Drawing.Point(111, 14);
+            this.comboBox1.Location = new System.Drawing.Point(206, 10);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 24);
             this.comboBox1.TabIndex = 22;
@@ -258,14 +275,18 @@
             this.label10.TabIndex = 24;
             this.label10.Text = "Tree Area";
             // 
+            // backgroundWorker2
+            // 
+            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
+            // 
+            // backgroundWorker3
+            // 
+            backgroundWorker3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker3_DoWork);
+            // 
             // backgroundWorker1
             // 
             backgroundWorker1.WorkerSupportsCancellation = true;
             backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            // 
-            // backgroundWorker2
-            // 
-            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
             // 
             // cancelbutton
             // 
@@ -388,23 +409,176 @@
             this.label17.TabIndex = 38;
             this.label17.Text = "Board/Log Count";
             // 
-            // backgroundWorker3
+            // frostbox
             // 
-            backgroundWorker3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker3_DoWork);
+            this.frostbox.Location = new System.Drawing.Point(199, 388);
+            this.frostbox.Name = "frostbox";
+            this.frostbox.ReadOnly = true;
+            this.frostbox.Size = new System.Drawing.Size(64, 22);
+            this.frostbox.TabIndex = 39;
             // 
-            // gumptext
+            // label18
             // 
-            this.gumptext.Location = new System.Drawing.Point(49, 133);
-            this.gumptext.Name = "gumptext";
-            this.gumptext.ReadOnly = true;
-            this.gumptext.Size = new System.Drawing.Size(100, 22);
-            this.gumptext.TabIndex = 6;
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(270, 391);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(73, 17);
+            this.label18.TabIndex = 40;
+            this.label18.Text = "Frostwood";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(3, 193);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(49, 17);
+            this.label19.TabIndex = 41;
+            this.label19.Text = "Avg/hr";
+            // 
+            // avghr
+            // 
+            this.avghr.AutoSize = true;
+            this.avghr.Location = new System.Drawing.Point(66, 193);
+            this.avghr.Name = "avghr";
+            this.avghr.Size = new System.Drawing.Size(16, 17);
+            this.avghr.TabIndex = 42;
+            this.avghr.Text = "0";
+            // 
+            // statustext
+            // 
+            this.statustext.Location = new System.Drawing.Point(144, 129);
+            this.statustext.Name = "statustext";
+            this.statustext.ReadOnly = true;
+            this.statustext.Size = new System.Drawing.Size(100, 22);
+            this.statustext.TabIndex = 43;
+            // 
+            // savebutton
+            // 
+            this.savebutton.Location = new System.Drawing.Point(358, 168);
+            this.savebutton.Name = "savebutton";
+            this.savebutton.Size = new System.Drawing.Size(75, 23);
+            this.savebutton.TabIndex = 44;
+            this.savebutton.Text = "Save";
+            this.savebutton.UseVisualStyleBackColor = true;
+            this.savebutton.Click += new System.EventHandler(this.savebutton_Click);
+            // 
+            // loadbutton
+            // 
+            this.loadbutton.Location = new System.Drawing.Point(439, 168);
+            this.loadbutton.Name = "loadbutton";
+            this.loadbutton.Size = new System.Drawing.Size(75, 23);
+            this.loadbutton.TabIndex = 45;
+            this.loadbutton.Text = "Load";
+            this.loadbutton.UseVisualStyleBackColor = true;
+            this.loadbutton.Click += new System.EventHandler(this.loadbutton_Click);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(428, 331);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(37, 17);
+            this.label20.TabIndex = 55;
+            this.label20.Text = "Bark";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(428, 303);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(48, 17);
+            this.label21.TabIndex = 54;
+            this.label21.Text = "Switch";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(428, 276);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(77, 17);
+            this.label22.TabIndex = 53;
+            this.label22.Text = "Lumi Fungi";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(428, 245);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(74, 17);
+            this.label23.TabIndex = 52;
+            this.label23.Text = "Para Plant";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(428, 216);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(49, 17);
+            this.label24.TabIndex = 51;
+            this.label24.Text = "Amber";
+            // 
+            // barkbox
+            // 
+            this.barkbox.Location = new System.Drawing.Point(358, 328);
+            this.barkbox.Name = "barkbox";
+            this.barkbox.ReadOnly = true;
+            this.barkbox.Size = new System.Drawing.Size(64, 22);
+            this.barkbox.TabIndex = 50;
+            // 
+            // switchbox
+            // 
+            this.switchbox.Location = new System.Drawing.Point(358, 300);
+            this.switchbox.Name = "switchbox";
+            this.switchbox.ReadOnly = true;
+            this.switchbox.Size = new System.Drawing.Size(64, 22);
+            this.switchbox.TabIndex = 49;
+            // 
+            // fungibox
+            // 
+            this.fungibox.Location = new System.Drawing.Point(358, 271);
+            this.fungibox.Name = "fungibox";
+            this.fungibox.ReadOnly = true;
+            this.fungibox.Size = new System.Drawing.Size(64, 22);
+            this.fungibox.TabIndex = 48;
+            // 
+            // plantbox
+            // 
+            this.plantbox.Location = new System.Drawing.Point(358, 242);
+            this.plantbox.Name = "plantbox";
+            this.plantbox.ReadOnly = true;
+            this.plantbox.Size = new System.Drawing.Size(64, 22);
+            this.plantbox.TabIndex = 47;
+            // 
+            // amberbox
+            // 
+            this.amberbox.Location = new System.Drawing.Point(358, 213);
+            this.amberbox.Name = "amberbox";
+            this.amberbox.ReadOnly = true;
+            this.amberbox.Size = new System.Drawing.Size(64, 22);
+            this.amberbox.TabIndex = 46;
             // 
             // Lumberjacker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(356, 393);
+            this.ClientSize = new System.Drawing.Size(523, 422);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.label21);
+            this.Controls.Add(this.label22);
+            this.Controls.Add(this.label23);
+            this.Controls.Add(this.label24);
+            this.Controls.Add(this.barkbox);
+            this.Controls.Add(this.switchbox);
+            this.Controls.Add(this.fungibox);
+            this.Controls.Add(this.plantbox);
+            this.Controls.Add(this.amberbox);
+            this.Controls.Add(this.loadbutton);
+            this.Controls.Add(this.savebutton);
+            this.Controls.Add(this.statustext);
+            this.Controls.Add(this.avghr);
+            this.Controls.Add(this.label19);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.frostbox);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
@@ -436,7 +610,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.gumptext);
             this.Controls.Add(this.axetextbox);
             this.Controls.Add(this.recallstatus);
             this.Controls.Add(this.Runebooktbox);
@@ -488,7 +661,24 @@
         public System.Windows.Forms.TextBox yewbox;
         public System.Windows.Forms.TextBox bloodbox;
         public System.Windows.Forms.TextBox hwbox;
-        public System.Windows.Forms.TextBox gumptext;
+        public static System.Windows.Forms.TextBox gumptext;
+        public System.Windows.Forms.TextBox frostbox;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label avghr;
+        public System.Windows.Forms.TextBox statustext;
+        private System.Windows.Forms.Button savebutton;
+        private System.Windows.Forms.Button loadbutton;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label24;
+        public System.Windows.Forms.TextBox barkbox;
+        public System.Windows.Forms.TextBox switchbox;
+        public System.Windows.Forms.TextBox fungibox;
+        public System.Windows.Forms.TextBox plantbox;
+        public System.Windows.Forms.TextBox amberbox;
         public static System.ComponentModel.BackgroundWorker backgroundWorker3;
         public static System.ComponentModel.BackgroundWorker backgroundWorker1;
     }

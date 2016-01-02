@@ -42,26 +42,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScriptGUI.exe" size="27072">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScriptGUI.exe" size="34240">
       <assemblyIdentity name="ScriptGUI" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>52wmTHwjXbVb6WiX0q+64Knynh0Zhsn/tp/bNjjrE6k=</dsig:DigestValue>
+        <dsig:DigestValue>Nr9nZVuOz7Ie8PblEkOeNT46iqS6Eys5/J/w4t8Lh4c=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScriptSDK.dll" size="297472">
-      <assemblyIdentity name="ScriptSDK" version="1.0.3.20978" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScriptSDK.dll" size="301568">
+      <assemblyIdentity name="ScriptSDK" version="1.0.3.24580" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>dVnglnMgfeL15EzW7ghxdTkPom+6kG6XWFuwSWbSPEE=</dsig:DigestValue>
+        <dsig:DigestValue>isHOPKR+fnCM/dOXA2jVPTA6HjTJ52aqvlKMvsp7KHc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
