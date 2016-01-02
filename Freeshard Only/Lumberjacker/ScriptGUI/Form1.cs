@@ -239,6 +239,23 @@ namespace ScriptGUI
             MessageBox.Show(string.Format("We have ran for {0} minutes. Thank you! ", endtimebox.Text));
             Invoke((MethodInvoker)
                 delegate { lumberjackbutton.Enabled = true; });
+            Clearcounts();
+        }
+
+        private static void Clearcounts()
+        {
+            Lumbermethod.Oak = 0;
+            Lumbermethod.Ash = 0;
+            Lumbermethod.Yew = 0;
+            Lumbermethod.Hw = 0;
+            Lumbermethod.Blood = 0;
+            Lumbermethod.Reg = 0;
+            Lumbermethod.Frost = 0;
+            Lumbermethod.Amber = 0;
+            Lumbermethod.Fungi = 0;
+            Lumbermethod.Bark = 0;
+            Lumbermethod.Switch = 0;
+            Lumbermethod.Plant = 0;
         }
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
