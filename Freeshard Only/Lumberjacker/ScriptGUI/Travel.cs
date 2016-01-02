@@ -6,7 +6,7 @@ using ScriptSDK.Gumps;
 using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
 
-namespace ScriptGUI
+namespace TLumberjack
 {
     class Travel
     {

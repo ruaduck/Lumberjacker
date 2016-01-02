@@ -3,7 +3,8 @@
 // Verision : 1.0a                                                      //
 // Versiion Date: 9/7/15                                                //
 // Release Date:                                                        //
-// Special Thanks:  Crome for examples and ScriptSDK                    //
+// Special Thanks:  Crome for examples and ScriptSDK; Unisharp for      //
+//                  journal scanning                                    //
 // Authorized Release Locations:  www.scriptuo.com ; www.rebirthuo.com  //
 //////////////////////////////////////////////////////////////////////////
 
@@ -12,28 +13,18 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using ScriptGUI.Properties;
+using TLumberjack.Properties;
 using ScriptSDK;
 using ScriptSDK.API;
+using ScriptSDK.Engines;
 using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
 
-namespace ScriptGUI
+namespace TLumberjack
 {
     public partial class Lumberjacker : Form
     {
         public static string Method = "Not Set";
-
-        public Lumberjacker()
-        {
-            Stealth.Client.ClilocSpeech += OnClilocSpeech;
-            InitializeComponent();
-            cancelbutton.Enabled = false;
-            lumberjackbutton.Enabled = false;
-            loadbutton.Enabled = true;
-            savebutton.Enabled = false;
-            startsetup.Enabled = false;
-        }
         public static Item Housecontainer;
         public Serial AxeSerial;
         public static DateTime Endtime;
@@ -52,6 +43,25 @@ namespace ScriptGUI
         public static bool Encumbered;
         public static bool Actionperform;
         public static bool Loadused;
+        public Lumberjacker()
+        {
+            if (UacHelper.IsProcessElevated)
+            {
+                Stealth.Client.ClilocSpeech += OnClilocSpeech;
+                InitializeComponent();
+                cancelbutton.Enabled = false;
+                lumberjackbutton.Enabled = false;
+                loadbutton.Enabled = true;
+                savebutton.Enabled = false;
+                startsetup.Enabled = false;
+            }
+            else
+            {
+                MessageBox.Show("Please run as administrator.");
+                Environment.Exit(1);
+            }
+        }
+        
 
         private static void OnClilocSpeech(object sender, ClilocSpeechEventArgs e)
         {

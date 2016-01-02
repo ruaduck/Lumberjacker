@@ -11,7 +11,7 @@ using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
 using ScriptSDK.Targets;
 
-namespace ScriptGUI
+namespace TLumberjack
 {
     class Lumbermethod
     {
