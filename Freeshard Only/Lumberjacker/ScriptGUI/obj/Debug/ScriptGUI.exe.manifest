@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScriptGUI.exe" size="28096">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScriptGUI.exe" size="30144">
       <assemblyIdentity name="ScriptGUI" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>KrKIlX0PW1wQb83xGWYP30X2ZCPELPp++nmwKel9ob4=</dsig:DigestValue>
+        <dsig:DigestValue>cONEo6dSJVVawspTsI02/grIQWPi6UnwpM6/NERkL30=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

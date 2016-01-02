@@ -2,7 +2,6 @@
 using System.Threading;
 using ScriptSDK;
 using ScriptSDK.API;
-using ScriptSDK.Engines;
 using ScriptSDK.Gumps;
 using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
@@ -14,12 +13,19 @@ namespace ScriptGUI
 
         public static bool Recall(Item runebookserial, int bookspot, string recalltype, bool osi)
         {
+            Stealth.Client.AddToSystemJournal(string.Format("Recalling to spot {0} using {1}", bookspot, recalltype));
             Gump runegump;
             var loc1 = PlayerMobile.GetPlayer().Location;// LOC before recall
             runebookserial.DoubleClick(); // Open Runebook
             Stealth.Client.Wait(1000);
-            if (!osi) { runegump = GetRunebookGump(0x554B87F3, runebookserial.Serial.Value); } // Choose gump as Runebook Gump
-            else { runegump = GetRunebookGump(0x0059, runebookserial.Serial.Value); }
+            if (osi)
+            {
+                runegump = GetRunebookGump(0x0059, runebookserial.Serial.Value);
+            }
+            else
+            {
+                runegump = GetRunebookGump(0x554B87F3, runebookserial.Serial.Value);
+            } // Choose gump as Runebook Gump
             var recall = bookspot*6 - 1;
             var sj = bookspot*6 + 1;
             var recallosi = bookspot + 49;
@@ -77,20 +83,6 @@ namespace ScriptGUI
 
             var g = new Gump(GumpHelper.GetGump(gumpType, false));
             return g;
-        }
-        
-        
-
-        public uint SetRunebookId()
-        {
-            Item runebook = null;
-            var runebooks = Scanner.Find<Item>(0x22C5, 0xFFFF, Stealth.Client.GetBackpackID(), true);
-            foreach (var book in runebooks)
-            {
-                runebook = book;
-            }
-            Stealth.Client.AddToSystemJournal(string.Format("{0} Runebooks found, {1} Serial of your Runebook", runebooks.Count, runebook));
-            return runebook != null ? runebook.Serial.Value : 0;
         }
     }
 }

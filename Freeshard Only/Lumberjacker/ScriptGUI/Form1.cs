@@ -9,6 +9,7 @@
 
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using ScriptGUI.Properties;
@@ -29,11 +30,14 @@ namespace ScriptGUI
             InitializeComponent();
             cancelbutton.Enabled = false;
             lumberjackbutton.Enabled = false;
-
+            loadbutton.Enabled = true;
+            savebutton.Enabled = false;
+            startsetup.Enabled = false;
         }
         public static Item Housecontainer;
         public Serial AxeSerial;
         public static DateTime Endtime;
+        public static DateTime Starttime;
         public static int Minutes; //Minutes to Run
         public static int Homerune; // Rune Home
         public static int Bankrune;  //  Bank Rune
@@ -45,6 +49,9 @@ namespace ScriptGUI
         public static int Treearea; //  Area to look for tree
         public static int Maxweight;
         public static bool Speechhit;
+        public static bool Encumbered;
+        public static bool Actionperform;
+        public static bool Loadused;
 
         private static void OnClilocSpeech(object sender, ClilocSpeechEventArgs e)
         {
@@ -53,8 +60,11 @@ namespace ScriptGUI
                 case "There's not enough wood here to harvest.":
                     Speechhit = true;
                     break;
-
-                default:
+                case "Thou art too encumbered to move.":
+                    Encumbered = true;
+                    break;
+                case "You must wait to perform another action.":
+                    Actionperform = true;
                     break;
             }
         }
@@ -89,17 +99,18 @@ namespace ScriptGUI
         {
             if (SetInputs())
             {
+                Starttime = DateTime.Now;
                 Endtime = DateTime.Now.AddMinutes((Minutes));
                 Start();
                 cancelbutton.Enabled = true;
                 lumberjackbutton.Enabled = false;
+                loadbutton.Enabled = false;
+                savebutton.Enabled = false;
             }
             else MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
-
-
         }
 
-        private void Start()
+        private static void Start()
         {
             if (!backgroundWorker1.IsBusy) backgroundWorker1.RunWorkerAsync();
                     
@@ -145,24 +156,13 @@ namespace ScriptGUI
 
             #endregion
         }
-        private static void RunebookSetup()
+        private void RunebookSetup()
         {
             MessageBox.Show(@"Select your Runebook");
             Runebook = new Item(new Serial(Getitem()));
-            //Travel travel = new Travel();
             #region Get Runebook Info
-            //DialogResult runebookDialogResult = MessageBox.Show(@"Do you have only 1 runebook in your backpack?", @"Getting Axe ID", MessageBoxButtons.YesNo);
-            //if (runebookDialogResult == DialogResult.Yes)
-            //{
-            //    Runebook = travel.SetRunebookId();
-            //    Invoke((MethodInvoker)
-            //            delegate { Runebooktbox.Text = Runebook == 0 ? "Error" : Runebook.ToString(); });
-            //}
-            //else if (runebookDialogResult == DialogResult.No)
-            //{
-            //    MessageBox.Show(@"Get your runebooks correct and start script again.");
-            //    Close();
-            //}
+            Invoke((MethodInvoker)
+                        delegate { Runebooktbox.Text = Runebook.Serial.Value.ToString(); });
             #endregion
         }
         private static uint Getitem()
@@ -195,29 +195,11 @@ namespace ScriptGUI
         }
 
         #endregion
-
-        public void Updatelogamounts()
-        {
-
-        }
-        public string GetMethod()
-        {
-            return Method;
-        }
-
         private void startsetup_Click(object sender, EventArgs e)
         {
             startsetup.Enabled = false;
-            Setup();
-            
-            
+            Setup();    
         }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
            Lumberjackloop();
@@ -230,7 +212,7 @@ namespace ScriptGUI
 
                 for (Runetouse = Firstrune; Runetouse < Lastrune + 1; Runetouse++)
                 {
-                    Invoke((MethodInvoker)delegate { gumptext.Text = string.Format("Recalling to spot {0}", Runetouse); });
+                    Invoke((MethodInvoker)delegate { statustext.Text = string.Format("Recalling to spot {0}", Runetouse); });
                     if (!Travel.Recall(Runebook, Runetouse, Method, Osi))
                     {
                         Invoke((MethodInvoker)
@@ -245,11 +227,14 @@ namespace ScriptGUI
                     if (Endtime < DateTime.Now) backgroundWorker1.CancelAsync();
                     if (backgroundWorker1.CancellationPending) break;
                     Invoke((MethodInvoker)
-                        delegate { gumptext.Text = @"getting next rune"; });
+                        delegate { statustext.Text = @"getting next rune"; });
                 }
                 if (backgroundWorker1.CancellationPending) break;
             }
-            GoHome();
+            while (!GoHome())
+            {
+                Thread.Sleep(50);
+            }
             Lumbermethod.Unload(Housecontainer);
             MessageBox.Show(string.Format("We have ran for {0} minutes. Thank you! ", endtimebox.Text));
             Invoke((MethodInvoker)
@@ -276,7 +261,7 @@ namespace ScriptGUI
                 {
                     Text = PlayerMobile.GetPlayer().Name + @" - Lumberjacker";
                     lumberjackbutton.Enabled = true;
-
+                    savebutton.Enabled = true;
                 });
             }
 
@@ -294,9 +279,41 @@ namespace ScriptGUI
             lumberjackbutton.Enabled = true;
         }
 
+        private static int Avgperhour()
+        {
+            var count = Lumbermethod.Oak + Lumbermethod.Ash + Lumbermethod.Yew + Lumbermethod.Hw + Lumbermethod.Blood +
+                        Lumbermethod.Frost + Lumbermethod.Reg;
+            var timespan = DateTime.Now.Subtract ( Starttime );
+            var span = timespan.Minutes;
+            var avg = (count / span) * 60;
+
+            return avg;
+        }
+
         private void backgroundWorker3_DoWork(object sender, DoWorkEventArgs e)
         {
-            Invoke((MethodInvoker) delegate
+
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker) delegate
+                {
+                    oakbox.Text = Lumbermethod.Oak.ToString();
+                    ashbox.Text = Lumbermethod.Ash.ToString();
+                    yewbox.Text = Lumbermethod.Yew.ToString();
+                    hwbox.Text = Lumbermethod.Hw.ToString();
+                    bloodbox.Text = Lumbermethod.Blood.ToString();
+                    regbox.Text = Lumbermethod.Reg.ToString();
+                    frostbox.Text = Lumbermethod.Frost.ToString();
+                    amberbox.Text = Lumbermethod.Amber.ToString();
+                    fungibox.Text = Lumbermethod.Fungi.ToString();
+                    barkbox.Text = Lumbermethod.Bark.ToString();
+                    switchbox.Text = Lumbermethod.Switch.ToString();
+                    plantbox.Text = Lumbermethod.Plant.ToString();
+                    avghr.Text = Avgperhour().ToString();
+                });
+             
+            }
+            else
             {
                 oakbox.Text = Lumbermethod.Oak.ToString();
                 ashbox.Text = Lumbermethod.Ash.ToString();
@@ -304,8 +321,105 @@ namespace ScriptGUI
                 hwbox.Text = Lumbermethod.Hw.ToString();
                 bloodbox.Text = Lumbermethod.Blood.ToString();
                 regbox.Text = Lumbermethod.Reg.ToString();
-            });
+                frostbox.Text = Lumbermethod.Frost.ToString();
+                amberbox.Text = Lumbermethod.Amber.ToString();
+                fungibox.Text = Lumbermethod.Fungi.ToString();
+                barkbox.Text = Lumbermethod.Bark.ToString();
+                switchbox.Text = Lumbermethod.Switch.ToString();
+                plantbox.Text = Lumbermethod.Plant.ToString();
+                avghr.Text = Avgperhour().ToString();
+            }
         }
+
+        private void savebutton_Click(object sender, EventArgs e)
+        {
+                    FileStream file = new FileStream(string.Format("{0}.txt", PlayerMobile.GetPlayer().Name),
+                        FileMode.OpenOrCreate, FileAccess.Write);
+                    StreamWriter sw = new StreamWriter(file);
+                    sw.WriteLine(endtimebox.Text);
+                    sw.WriteLine(homerunebox.Text);
+                    sw.WriteLine(bankrunebox.Text);
+                    sw.WriteLine(firstrunebox.Text);
+                    sw.WriteLine(lastrunebox.Text);
+                    sw.WriteLine(treeareatbox.Text);
+                    sw.WriteLine(comboBox1.Text);
+                    sw.WriteLine(Runebook.Serial.Value);
+                    sw.WriteLine(AxeSerial.Value);
+                    sw.WriteLine(Housecontainer.Serial.Value);
+                    sw.WriteLine(Method);
+                    sw.Close();
+            Stealth.Client.AddToSystemJournal("Save file written");
+            loadbutton.Enabled = false;
+        }
+
+        private void loadbutton_Click(object sender, EventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker) delegate
+                {
+                    FileStream file = new FileStream(string.Format("{0}.txt", PlayerMobile.GetPlayer().Name),
+                        FileMode.OpenOrCreate, FileAccess.Read);
+                    StreamReader sr = new StreamReader(file);
+                    endtimebox.Text = sr.ReadLine();
+                    homerunebox.Text = sr.ReadLine();
+                    bankrunebox.Text = sr.ReadLine();
+                    firstrunebox.Text = sr.ReadLine();
+                    lastrunebox.Text = sr.ReadLine();
+                    treeareatbox.Text = sr.ReadLine();
+                    comboBox1.Text = sr.ReadLine();
+                    var runebook = sr.ReadLine();
+                    var axeSerial = sr.ReadLine();
+                    var housecontainer = sr.ReadLine();
+                    sr.Close();
+                    if (runebook != null) Runebook = new Item(uint.Parse(runebook));
+                    if (axeSerial != null) Lumbermethod.Theaxe = new UOEntity(uint.Parse(axeSerial));
+                    if (housecontainer != null) Housecontainer = new Item(uint.Parse(housecontainer));
+                    AxeSerial = Lumbermethod.Theaxe.Serial;
+                    Runebooktbox.Text = Runebook.Serial.ToString();
+                    axetextbox.Text = AxeSerial.ToString();
+                });
+            }
+            else
+            {
+
+                FileStream file = new FileStream(string.Format("{0}.txt", PlayerMobile.GetPlayer().Name),
+                FileMode.OpenOrCreate, FileAccess.Read);
+                using (StreamReader sr = new StreamReader(file))
+                {
+                    endtimebox.Text = sr.ReadLine();
+                    homerunebox.Text = sr.ReadLine();
+                    bankrunebox.Text = sr.ReadLine();
+                    firstrunebox.Text = sr.ReadLine();
+                    lastrunebox.Text = sr.ReadLine();
+                    treeareatbox.Text = sr.ReadLine();
+                    comboBox1.Text = sr.ReadLine();                   
+                    var runebook = sr.ReadLine();
+                    var axeSerial = sr.ReadLine();
+                    var housecontainer = sr.ReadLine();
+                    Method = sr.ReadLine();
+                    if (runebook != null) Runebook = new Item(uint.Parse(runebook));
+                    if (axeSerial != null) AxeSerial = new Item(Convert.ToUInt32(axeSerial)).Serial;
+                    if (housecontainer != null) Housecontainer = new Item(Convert.ToUInt32(housecontainer));
+                    Runebooktbox.Text = Runebook.Serial.ToString();
+                    axetextbox.Text = AxeSerial.ToString();
+                }
+            }
+            lumberjackbutton.Enabled = true;
+            startsetup.Enabled = false;
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Invoke((MethodInvoker)
+                delegate { Osi = comboBox1.Text == @"OSI"; });
+        }
+
+        private void endtimebox_TextChanged(object sender, EventArgs e)
+        {
+            startsetup.Enabled = true;
+        }
+
     }
 
 }
