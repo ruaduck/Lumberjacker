@@ -15,7 +15,7 @@ using System.Threading;
 using System.Windows.Forms;
 using TLumberjack.Properties;
 using ScriptSDK;
-using ScriptSDK.API;
+using StealthAPI;
 using ScriptSDK.Engines;
 using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
@@ -43,6 +43,7 @@ namespace TLumberjack
         public static bool Encumbered;
         public static bool Actionperform;
         public static bool Loadused;
+
         public Lumberjacker()
         {
             if (UacHelper.IsProcessElevated)
@@ -370,9 +371,9 @@ namespace TLumberjack
                     sw.WriteLine(lastrunebox.Text);
                     sw.WriteLine(treeareatbox.Text);
                     sw.WriteLine(comboBox1.Text);
-                    sw.WriteLine(Runebook.Serial.Value);
-                    sw.WriteLine(AxeSerial.Value);
-                    sw.WriteLine(Housecontainer.Serial.Value);
+                    sw.WriteLine(Runebook.Serial);
+                    sw.WriteLine(axetextbox.Text);
+                    sw.WriteLine(Housecontainer.Serial);
                     sw.WriteLine(Method);
                     sw.Close();
             Stealth.Client.AddToSystemJournal("Save file written");
@@ -409,10 +410,10 @@ namespace TLumberjack
             }
             else
             {
-
-                FileStream file = new FileStream(string.Format("{0}.txt", PlayerMobile.GetPlayer().Name),
+                var tempname = PlayerMobile.GetPlayer().Name;
+                FileStream file = new FileStream(string.Format("{0}.txt", tempname),
                 FileMode.OpenOrCreate, FileAccess.Read);
-                using (StreamReader sr = new StreamReader(file))
+                using (var sr = new StreamReader(file))
                 {
                     endtimebox.Text = sr.ReadLine();
                     homerunebox.Text = sr.ReadLine();
@@ -420,16 +421,15 @@ namespace TLumberjack
                     firstrunebox.Text = sr.ReadLine();
                     lastrunebox.Text = sr.ReadLine();
                     treeareatbox.Text = sr.ReadLine();
-                    comboBox1.Text = sr.ReadLine();                   
-                    var runebook = sr.ReadLine();
-                    var axeSerial = sr.ReadLine();
-                    var housecontainer = sr.ReadLine();
-                    Method = sr.ReadLine();
-                    if (runebook != null) Runebook = new Item(uint.Parse(runebook));
-                    if (axeSerial != null) AxeSerial = new Item(Convert.ToUInt32(axeSerial)).Serial;
-                    if (housecontainer != null) Housecontainer = new Item(Convert.ToUInt32(housecontainer));
-                    Runebooktbox.Text = Runebook.Serial.ToString();
-                    axetextbox.Text = AxeSerial.ToString();
+                    comboBox1.Text = sr.ReadLine();
+                    Runebooktbox.Text = sr.ReadLine().ToString();
+                    axetextbox.Text = sr.ReadLine().ToString();
+                    var housecontainer = sr.ReadLine().ToString();
+                    Method = sr.ReadLine().ToString();
+                    if (axetextbox.Text != null) AxeSerial = new Item(Convert.ToUInt32(axetextbox.Text,16)).Serial;
+                    if (housecontainer != null) Housecontainer = new Item(Convert.ToUInt32(housecontainer,16));
+                    if (Runebooktbox.Text != null) Runebook = new Item(Convert.ToUInt32(Runebooktbox.Text,16));
+               
                 }
             }
             lumberjackbutton.Enabled = true;

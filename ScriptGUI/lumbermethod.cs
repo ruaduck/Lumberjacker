@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using ScriptSDK;
-using ScriptSDK.API;
+using StealthAPI;
 using ScriptSDK.Attributes;
 using ScriptSDK.Data;
 using ScriptSDK.Engines;
@@ -49,9 +49,10 @@ namespace TLumberjack
             {
                 var player = PlayerMobile.GetPlayer();
                 player.Paperdoll.TwoHanded.DoubleClick();
-                var target = new EntityTarget(player,1000);
+                var target = new EntityTarget(1000);
                 target.Action(log);               
             }
+            
         }
         private static bool Checkweight()
         {
@@ -59,6 +60,7 @@ namespace TLumberjack
             weight = Stealth.Client.GetSelfWeight();
             if (weight < Lumberjacker.Maxweight) return weight >= Lumberjacker.Maxweight;
             LogToBoard();
+            Stealth.Client.Wait(1000);
             weight = Stealth.Client.GetSelfWeight();
             return weight >= Lumberjacker.Maxweight;
         }
