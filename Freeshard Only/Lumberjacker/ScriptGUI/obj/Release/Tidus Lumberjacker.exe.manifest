@@ -42,26 +42,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScriptSDK.dll" size="301568">
-      <assemblyIdentity name="ScriptSDK" version="1.0.3.24580" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScriptSDK.dll" size="280064">
+      <assemblyIdentity name="ScriptSDK" version="0.9.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>isHOPKR+fnCM/dOXA2jVPTA6HjTJ52aqvlKMvsp7KHc=</dsig:DigestValue>
+        <dsig:DigestValue>PJwiHxTW6qCj+upGH6OExL1UhUJu2BUx8zJKL+dNBbA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Tidus Lumberjacker.exe" size="34240">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Tidus Lumberjacker.exe" size="46528">
       <assemblyIdentity name="Tidus Lumberjacker" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>RngwTyLuM4iJR/Hn7T9SG21XmvP7WUMJIBFB8oJhJR0=</dsig:DigestValue>
+        <dsig:DigestValue>rnaDIRlGQZt/Jdi2XJn0oeJ818Gkh9Kreszg6Raa57M=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
