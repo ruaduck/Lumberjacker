@@ -1,4 +1,7 @@
-﻿using StealthAPI;
+﻿using System;
+using System.Linq;
+using ScriptSDK.Gumps;
+using StealthAPI;
 using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
 
@@ -33,32 +36,98 @@ namespace TLumberjack
             Runebook OSIrb = new Runebook(runebookserial.Serial.Value, OSIconfig, "OSI");
             Stealth.Client.AddToSystemJournal(string.Format("Recalling to spot {0} using {1}", bookspot, recalltype));
             //Gump runegump;
+            runebookserial.DoubleClick();
             var loc1 = PlayerMobile.GetPlayer().Location;// LOC before recall
             //runebookserial.DoubleClick(); // Open Runebook
             Stealth.Client.Wait(1000);
+            Gump g;
             if (osi)
             {
-                OSIrb.Parse();
-                if (recalltype == "Recall")
+                g = Gump.GetGump(0x0059); //OSI
+                if (g == null)
                 {
-                    OSIrb.Entries[bookspot - 1].Recall();
+                    Stealth.Client.AddToSystemJournal("Gump is Null");
                 }
                 else
                 {
-                    OSIrb.Entries[bookspot - 1].Sacred();
+                    var ScrollOffset = 10;
+                    var DropOffset = 200;
+                    var DefaultOffset = 300;
+                    var RecallOffset = 50;
+                    var GateOffset = 100;
+                    var SacredOffset = 75;
+                    var Jumper = 1;
+
+                    var any = false;
+                    foreach (var e in g.Buttons)
+                    {
+                        if (!e.PacketValue.Equals(RecallOffset + bookspot-1) && !e.Graphic.Released.Equals(2103) &&
+                            !e.Graphic.Pressed.Equals(2104)) continue;
+                        any = true;
+                        if (recalltype == "Recall")
+                        {
+                            Stealth.Client.AddToSystemJournal(String.Format("{0} is my packet value",RecallOffset + (bookspot-1)));
+                            var recallButton = g.Buttons.First(i => i.PacketValue.Equals(RecallOffset + (bookspot-1)));
+                            recallButton.Click();
+                            break;
+                        }
+                    }
                 }
+                //OSIrb.Parse();
+                //if (recalltype == "Recall")
+                //{
+                //    OSIrb.Entries[bookspot - 1].Recall();
+                //}
+                //else
+                //{
+                //    OSIrb.Entries[bookspot - 1].Sacred();
+                //}
             }
             else
             {
-                RUOrb.Parse();
-                if (recalltype == "Recall")
+                g = Gump.GetGump(0x554B87F3); //Freeshard
+                if (g == null)
                 {
-                    RUOrb.Entries[bookspot - 1].Recall();
+                    Stealth.Client.AddToSystemJournal("Gump is Null");
                 }
                 else
                 {
-                    RUOrb.Entries[bookspot - 1].Sacred();
+                    var ScrollOffset = 2;
+                    var DropOffset = 3;
+                    var DefaultOffset = 4;
+                    var RecallOffset = 5;
+                    var GateOffset = 6;
+                    var SacredOffset = 7;
+                    var Jumper = 6;
+                    var any = false;
+                    int go;
+                    go = RecallOffset + ((bookspot - 1) * Jumper);
+                    foreach (var e in g.Buttons)
+                    {                       
+                        if (!e.PacketValue.Equals(go) || !e.Graphic.Released.Equals(2103) ||
+                            !e.Graphic.Pressed.Equals(2104)) continue;
+                        any = true;
+                        if (recalltype == "Recall")
+                        {
+                            var recallButton =
+                                g.Buttons.First(i => i.PacketValue.Equals(go));
+                            recallButton.Click();
+                        }
+                        else
+                        {
+
+                        }
+                    }
                 }
+                //RUOrb.Parse();
+                //if (recalltype == "Recall")
+                //{
+                //    RUOrb.Entries[bookspot - 1].Recall();
+                //}
+                //else
+                //{
+                //    RUOrb.Entries[bookspot - 1].Sacred();
+                //}
             } 
             Stealth.Client.Wait(!osi ? 2000 : 3500);
             var loc2 = PlayerMobile.GetPlayer().Location; // LOC after recall

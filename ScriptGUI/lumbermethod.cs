@@ -192,8 +192,7 @@ namespace TLumberjack
         public static void Lumberjack(Serial axeserial, int distance)
         {
             var myaxe = new UOEntity(new Serial(axeserial.Value));
-            TileReader.Initialize(); //Initialize the TileReader
-            var trees = TileReader.GetLumberSpots(distance); //Search all Trees in Range of 1 Tile  
+            var trees = TileReader.GetLumberSpots(distance); //Search all Trees in Range of *Distance* Tiles
             var targethelper = TargetHelper.GetTarget(); // Assign the TargetHelper refeence
             foreach (var tree in trees) //iterate through all results
             {

@@ -123,6 +123,7 @@ namespace TLumberjack
 
         private static void Start()
         {
+            TileReader.Initialize(); //Initialize the TileReader
             if (!backgroundWorker1.IsBusy) backgroundWorker1.RunWorkerAsync();
                     
         }
@@ -312,7 +313,7 @@ namespace TLumberjack
             var count = Lumbermethod.Oak + Lumbermethod.Ash + Lumbermethod.Yew + Lumbermethod.Hw + Lumbermethod.Blood +
                         Lumbermethod.Frost + Lumbermethod.Reg;
             var timespan = DateTime.Now.Subtract ( Starttime );
-            var span = timespan.Minutes;
+            var span = (int)timespan.TotalMinutes;
             var avg = (count / span) * 60;
 
             return avg;
