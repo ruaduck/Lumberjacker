@@ -43,6 +43,7 @@ namespace TLumberjack
         public static bool Encumbered;
         public static bool Actionperform;
         public static bool Loadused;
+        public static bool Beetle;
 
         public Lumberjacker()
         {
@@ -168,6 +169,12 @@ namespace TLumberjack
 
             #endregion
         }
+        private void BeetleSetup()
+        {
+            MessageBox.Show(@"Lets setup your Beetle");
+            
+            throw new NotImplementedException();
+        }
         private void RunebookSetup()
         {
             MessageBox.Show(@"Select your Runebook");
@@ -274,6 +281,7 @@ namespace TLumberjack
         {
             if (SetInputs())
             {
+                if (Beetle == true){BeetleSetup();}
                 RecallSetup();
                 RunebookSetup();
                 AxeSerial = AxeSetup();
@@ -300,6 +308,8 @@ namespace TLumberjack
                 MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
             }
         }
+
+        
 
         private void cancelbutton_Click(object sender, EventArgs e)
         {

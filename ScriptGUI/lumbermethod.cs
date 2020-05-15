@@ -44,10 +44,10 @@ namespace TLumberjack
         private static void LogToBoard()
         {
             Stealth.Client.AddToSystemJournal("Converting Logs to boards");
+            var player = PlayerMobile.GetPlayer();
             var logs = Scanner.Find<Item>((ushort)Logs, 0xFFFF, Stealth.Client.GetBackpackID(), true);
             foreach (var log in logs)
             {
-                var player = PlayerMobile.GetPlayer();
                 player.Paperdoll.TwoHanded.DoubleClick();
                 var target = new EntityTarget(1000);
                 target.Action(log);               
