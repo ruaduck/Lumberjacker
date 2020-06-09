@@ -98,7 +98,7 @@ namespace TLumberjack
         }
         public void Setup()
         {
-            backgroundWorker2.RunWorkerAsync();
+            if (!backgroundWorker2.IsBusy)backgroundWorker2.RunWorkerAsync();
         }
         private static void ContainerSetup()
         {
@@ -125,8 +125,10 @@ namespace TLumberjack
         private static void Start()
         {
             TileReader.Initialize(); //Initialize the TileReader
-            if (!backgroundWorker1.IsBusy) backgroundWorker1.RunWorkerAsync();
-                    
+            if (!backgroundWorker1.IsBusy)
+            {
+                backgroundWorker1.RunWorkerAsync();
+            }
         }
 
         public static void Gohomeandunload()
@@ -257,7 +259,9 @@ namespace TLumberjack
             Lumbermethod.Unload(Housecontainer);
             MessageBox.Show(string.Format("We have ran for {0} minutes. Thank you! ", endtimebox.Text));
             Invoke((MethodInvoker)
-                delegate { lumberjackbutton.Enabled = true; });
+                delegate {
+                    savebutton.Enabled = true;
+                    lumberjackbutton.Enabled = true; });
             Clearcounts();
         }
 
@@ -304,7 +308,10 @@ namespace TLumberjack
 
             else
             {
-                startsetup.Enabled = true; 
+                Invoke((MethodInvoker)delegate
+                {
+                    startsetup.Enabled = true;
+                });
                 MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
             }
         }

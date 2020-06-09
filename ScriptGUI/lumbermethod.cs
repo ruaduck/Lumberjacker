@@ -180,7 +180,11 @@ namespace TLumberjack
                 while (Lumberjacker.Actionperform)
                     moveagain(item1, mycontainer);
             }
-            if (Lumberjacker.backgroundWorker3 != null) Lumberjacker.backgroundWorker3.RunWorkerAsync();
+
+            if (Lumberjacker.backgroundWorker3 != null)
+            {
+                Lumberjacker.backgroundWorker3.RunWorkerAsync();
+            }
         }
 
         public static void moveagain(Item item, Item container)
@@ -193,7 +197,7 @@ namespace TLumberjack
         {
             var myaxe = new UOEntity(new Serial(axeserial.Value));
             var trees = TileReader.GetLumberSpots(distance); //Search all Trees in Range of *Distance* Tiles
-            var targethelper = TargetHelper.GetTarget(); // Assign the TargetHelper refeence
+            var targethelper = TargetHelper.GetTarget(); // Assign the TargetHelper reference
             foreach (var tree in trees) //iterate through all results
             {
                 Stealth.Client.newMoveXY(tree.X, tree.Y, true, 1, true); // Move to Tree

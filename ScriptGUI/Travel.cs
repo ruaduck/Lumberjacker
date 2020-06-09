@@ -50,38 +50,19 @@ namespace TLumberjack
                 }
                 else
                 {
-                    var ScrollOffset = 10;
-                    var DropOffset = 200;
-                    var DefaultOffset = 300;
-                    var RecallOffset = 50;
-                    var GateOffset = 100;
-                    var SacredOffset = 75;
-                    var Jumper = 1;
-
-                    var any = false;
                     foreach (var e in g.Buttons)
                     {
-                        if (!e.PacketValue.Equals(RecallOffset + bookspot-1) && !e.Graphic.Released.Equals(2103) &&
+                        if (!e.PacketValue.Equals(OSIconfig.RecallOffset + bookspot-1) && !e.Graphic.Released.Equals(2103) &&
                             !e.Graphic.Pressed.Equals(2104)) continue;
-                        any = true;
                         if (recalltype == "Recall")
                         {
-                            Stealth.Client.AddToSystemJournal(String.Format("{0} is my packet value",RecallOffset + (bookspot-1)));
-                            var recallButton = g.Buttons.First(i => i.PacketValue.Equals(RecallOffset + (bookspot-1)));
+                            Stealth.Client.AddToSystemJournal(String.Format("{0} is my packet value",OSIconfig.RecallOffset + (bookspot-1)));
+                            var recallButton = g.Buttons.First(i => i.PacketValue.Equals(OSIconfig.RecallOffset + (bookspot-1)));
                             recallButton.Click();
                             break;
                         }
                     }
                 }
-                //OSIrb.Parse();
-                //if (recalltype == "Recall")
-                //{
-                //    OSIrb.Entries[bookspot - 1].Recall();
-                //}
-                //else
-                //{
-                //    OSIrb.Entries[bookspot - 1].Sacred();
-                //}
             }
             else
             {
@@ -92,21 +73,12 @@ namespace TLumberjack
                 }
                 else
                 {
-                    var ScrollOffset = 2;
-                    var DropOffset = 3;
-                    var DefaultOffset = 4;
-                    var RecallOffset = 5;
-                    var GateOffset = 6;
-                    var SacredOffset = 7;
-                    var Jumper = 6;
-                    var any = false;
                     int go;
-                    go = RecallOffset + ((bookspot - 1) * Jumper);
+                    go = RUOconfig.RecallOffset + ((bookspot - 1) * RUOconfig.Jumper);
                     foreach (var e in g.Buttons)
                     {                       
                         if (!e.PacketValue.Equals(go) || !e.Graphic.Released.Equals(2103) ||
                             !e.Graphic.Pressed.Equals(2104)) continue;
-                        any = true;
                         if (recalltype == "Recall")
                         {
                             var recallButton =
@@ -119,37 +91,10 @@ namespace TLumberjack
                         }
                     }
                 }
-                //RUOrb.Parse();
-                //if (recalltype == "Recall")
-                //{
-                //    RUOrb.Entries[bookspot - 1].Recall();
-                //}
-                //else
-                //{
-                //    RUOrb.Entries[bookspot - 1].Sacred();
-                //}
             } 
             Stealth.Client.Wait(!osi ? 2000 : 3500);
             var loc2 = PlayerMobile.GetPlayer().Location; // LOC after recall
             return loc1 != loc2; // Compare Locs to see if you moved.
         }
-
-        //private static Gump GetRunebookGump(uint gumpType, uint runebookSerial)
-        //{
-        //    if ((GumpHelper.GetGumpIndex(gumpType)) > -1)
-        //    {
-        //        GumpHelper.CloseGump(gumpType, false);
-        //    }
-
-        //    var runebook = new Item(new Serial(runebookSerial));
-        //    runebook.DoubleClick();
-        //    while ((GumpHelper.GetGumpIndex(gumpType)) < 0)
-        //    {
-        //        Thread.Sleep(50);
-        //    }
-
-        //    var g = new Gump(GumpHelper.GetGump(gumpType, false));
-        //    return g;
-        //}
     }
 }
