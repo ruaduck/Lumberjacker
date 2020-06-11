@@ -14,11 +14,14 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using TLumberjack.Properties;
-using ScriptSDK;
 using StealthAPI;
+using ScriptSDK;
 using ScriptSDK.Engines;
 using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
+using System.Linq;
+//using ScriptDotNet2;
+//using ScriptDotNet2.Services;
 
 namespace TLumberjack
 {
@@ -44,13 +47,15 @@ namespace TLumberjack
         public static bool Actionperform;
         public static bool Loadused;
         public static bool Beetle;
-
-        public Lumberjacker()
+        public Lumberjacker() 
         {
             if (UacHelper.IsProcessElevated)
             {
-                Stealth.Client.ClilocSpeech += OnClilocSpeech;
                 InitializeComponent();
+                Stealth.Client.Speech += speech;
+                Stealth.Client.ClilocSpeech += OnClilocSpeech;
+                Stealth.Client.Buff_DebuffSystem += buffsystem;
+                //ScriptDotNet2.Stealth.Default.GetService<IEventSystemService>().ClilocSpeech += OnClilocSpeech;
                 cancelbutton.Enabled = false;
                 lumberjackbutton.Enabled = false;
                 loadbutton.Enabled = true;
@@ -63,26 +68,26 @@ namespace TLumberjack
                 Environment.Exit(1);
             }
         }
-        
-
+       
         private static void OnClilocSpeech(object sender, ClilocSpeechEventArgs e)
         {
-            switch (e.Text)
-            {
-                case "There's not enough wood here to harvest.":
-                    Speechhit = true;
-                    break;
-                case "Thou art too encumbered to move.":
-                    Encumbered = true;
-                    break;
-                case "You must wait to perform another action.":
-                    Actionperform = true;
-                    break;
-            }
+      
+            if (e.Text.Contains("There's not enough wood here to harvest.")) Speechhit = true;
+            if (e.Text.Contains("Thou art too encumbered to move.")) Encumbered= true;
+            if (e.Text.Contains("You must wait to perform another action.")) Actionperform = true;
+        }
+        private static void buffsystem(object sender, Buff_DebuffSystemEventArgs e)
+        {
+            //MessageBox.Show(String.Format("{0}",(Buffs)e.ObjectId));
+        }
+        private static void speech(object sender, SpeechEventArgs e)
+        {
+            //MessageBox.Show(e.Text);
+            
         }
         public bool SetInputs()
         {
-            Maxweight = Stealth.Client.GetSelfMaxWeight() - 30;
+            Maxweight = StealthAPI.Stealth.Client.GetSelfMaxWeight() - 30;
             Invoke((MethodInvoker)
                 delegate { Osi = comboBox1.Text == @"OSI"; });
             if (endtimebox == null || homerunebox == null || bankrunebox == null || firstrunebox == null ||
@@ -331,6 +336,7 @@ namespace TLumberjack
                         Lumbermethod.Frost + Lumbermethod.Reg;
             var timespan = DateTime.Now.Subtract ( Starttime );
             var span = (int)timespan.TotalMinutes;
+            if (span < 1) span = 1;
             var avg = (count / span) * 60;
 
             return avg;
