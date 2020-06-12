@@ -19,7 +19,6 @@ using ScriptSDK;
 using ScriptSDK.Engines;
 using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
-using System.Linq;
 //using ScriptDotNet2;
 //using ScriptDotNet2.Services;
 
@@ -47,23 +46,44 @@ namespace TLumberjack
         public static bool Actionperform;
         public static bool Loadused;
         public static bool Beetle;
-
+        public static Mobile BlueBeetle;
+        public static ScriptSDK.Items.Container BeetleContainer;
 
 
         public Lumberjacker() 
         {
+
             if (UacHelper.IsProcessElevated)
             {
                 InitializeComponent();
+                #region Event Listeners
                 Stealth.Client.Speech += LumberEvents.speech;
                 Stealth.Client.ClilocSpeech += LumberEvents.OnClilocSpeech;
                 Stealth.Client.Buff_DebuffSystem += LumberEvents.Buffsystem;
                 //ScriptDotNet2.Stealth.Default.GetService<IEventSystemService>().ClilocSpeech += OnClilocSpeech;
+                #endregion
+                #region Buttons
                 cancelbutton.Enabled = false;
                 lumberjackbutton.Enabled = false;
                 loadbutton.Enabled = true;
                 savebutton.Enabled = false;
                 startsetup.Enabled = false;
+                #endregion
+                #region Use Beetle?
+                var BeetleDialogResult =
+                MessageBox.Show("Do you have a Blue Beetle?",
+                    @"Beetle Method", MessageBoxButtons.YesNo);
+                switch (BeetleDialogResult)
+                {
+                    case DialogResult.Yes:
+                        Beetle = true;
+                        BeetleSetup();
+                        break;
+                    case DialogResult.No:
+                        Beetle = false;
+                        break;
+                }
+                #endregion
             }
             else
             {
@@ -163,9 +183,13 @@ namespace TLumberjack
         }
         private void BeetleSetup()
         {
+            PlayerMobile.GetPlayer().DoubleClick();
             MessageBox.Show(@"Lets setup your Beetle");
-            
-            throw new NotImplementedException();
+            BlueBeetle = new Mobile(new Serial(Getitem()));
+            BeetleContainer = BlueBeetle.Paperdoll.Backpack;
+            BeetleContainer.DoubleClick();
+            BlueBeetle.DoubleClick();
+
         }
         private void RunebookSetup()
         {
@@ -201,8 +225,8 @@ namespace TLumberjack
                     Method = "Sacred Journey";
                     break;
             }
-
             #endregion
+            
         }
 
         #endregion
@@ -275,7 +299,7 @@ namespace TLumberjack
         {
             if (SetInputs())
             {
-                if (Beetle == true){BeetleSetup();}
+                
                 RecallSetup();
                 RunebookSetup();
                 AxeSerial = AxeSetup();

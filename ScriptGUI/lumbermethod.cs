@@ -119,40 +119,40 @@ namespace TLumberjack
             }
             Stealth.Client.AddToSystemJournal(string.Format("Dropping off {0} {1}.", item.Amount, (LumberItems)item.ObjectType));
         }
-        private static void MoveLogs(Item container)
+        private static void MoveLogs(uint container)
         {
             var logs = Scanner.Find<Item>((ushort)Lumber.Logs, 0xFFFF, Stealth.Client.GetBackpackID(), true);
             foreach (var log in logs)
             {
                 LumberCount(log);
-                Stealth.Client.MoveItem(log.Serial.Value, log.Amount, container.Serial.Value, 0, 0, 0);
+                Stealth.Client.MoveItem(log.Serial.Value, log.Amount, container, 0, 0, 0);
                 Stealth.Client.Wait(1000);
                 while (Lumberjacker.Actionperform)
                     Moveagain(log, container);
             }
         }
-        private static void MoveBoards(Item container)
+        private static void MoveBoards(uint container)
         {
             var board = Scanner.Find<Item>((ushort)Lumber.Boards, 0xFFFF, Stealth.Client.GetBackpackID(), true);
             foreach (var log in board)
             {
                 LumberCount(log);
-                Stealth.Client.MoveItem(log.Serial.Value, log.Amount, container.Serial.Value, 0, 0, 0);
+                Stealth.Client.MoveItem(log.Serial.Value, log.Amount, container, 0, 0, 0);
                 Stealth.Client.Wait(1000);
                 while (Lumberjacker.Actionperform)
                     Moveagain(log, container);
             }
         }
-        private static void MoveItems(List<ushort> Items, Item container)
+        private static void MoveItems(List<ushort> Items, uint tocontainer, uint fromcontainer)
         {
-            foreach (var item in Items.Select(extra => ushort.Parse(extra.ToString())).Select(move => Scanner.Find<Item>(move, 0xFFFF, Stealth.Client.GetBackpackID(), true)).SelectMany(item => item))
+            foreach (var item in Items.Select(extra => ushort.Parse(extra.ToString())).Select(move => Scanner.Find<Item>(move, 0xFFFF, fromcontainer, true)).SelectMany(item => item))
             {
                 if (Enum.IsDefined(typeof(LumberItems), (int)item.ObjectType)) LumberItemCount(item);
                 else LumberCount(item);
-                Stealth.Client.MoveItem(item.Serial.Value, item.Amount, container.Serial.Value, 0, 0, 0);
+                Stealth.Client.MoveItem(item.Serial.Value, item.Amount, tocontainer, 0, 0, 0);
                 Stealth.Client.Wait(1000);
                 while (Lumberjacker.Actionperform)
-                    Moveagain(item, container);
+                    Moveagain(item, tocontainer);
             }
         }
         public static void Unload(Item mycontainer)
@@ -163,8 +163,16 @@ namespace TLumberjack
 
             //MoveLogs(mycontainer);
             //MoveBoards(mycontainer);
-            MoveItems(Extras, mycontainer);
-            MoveItems(Lumbers, mycontainer);
+            MoveItems(Extras, mycontainer.Serial.Value, Stealth.Client.GetBackpackID());
+            MoveItems(Lumbers, mycontainer.Serial.Value, Stealth.Client.GetBackpackID());
+            if (Lumberjacker.Beetle)
+            {
+                PlayerMobile.GetPlayer().DoubleClick();
+                Lumberjacker.BeetleContainer.DoubleClick();
+                MoveItems(Extras, mycontainer.Serial.Value,Lumberjacker.BeetleContainer.Serial.Value);
+                MoveItems(Lumbers, mycontainer.Serial.Value, Lumberjacker.BeetleContainer.Serial.Value);
+                Lumberjacker.BlueBeetle.DoubleClick();
+            }
 
             if (Lumberjacker.backgroundWorker3 != null)
             {
@@ -172,14 +180,15 @@ namespace TLumberjack
             }
         }
 
-        private static void Moveagain(Item item, Item container)
+        private static void Moveagain(Item item, uint container)
         {
             Lumberjacker.Actionperform = false;
-            Stealth.Client.MoveItem(item.Serial.Value, item.Amount, container.Serial.Value, 0, 0, 0);
+            Stealth.Client.MoveItem(item.Serial.Value, item.Amount, container, 0, 0, 0);
             Stealth.Client.Wait(1100);
         }
         public static void Lumberjack(Serial axeserial, int distance)
         {
+            Setvariables();
             var myaxe = new UOEntity(new Serial(axeserial.Value));
             var trees = TileReader.GetLumberSpots(distance); //Search all Trees in Range of *Distance* Tiles
             foreach (var tree in trees) //iterate through all results
@@ -204,8 +213,25 @@ namespace TLumberjack
                 if (Lumberjacker.backgroundWorker1.CancellationPending) break;
                 if (Checkweight())
                 {
-                    Lumberjacker.Gohomeandunload();
-                    Stealth.Client.newMoveXY(tree.X, tree.Y, true, 1, true);
+                    if (Lumberjacker.Beetle)
+                    {
+                        PlayerMobile.GetPlayer().DoubleClick();
+                        Lumberjacker.BeetleContainer.DoubleClick();
+                        Stealth.Client.Wait(1100); //wait 1 second
+                        MoveItems(Extras, Lumberjacker.BeetleContainer.Serial.Value, Stealth.Client.GetBackpackID());
+                        MoveItems(Lumbers, Lumberjacker.BeetleContainer.Serial.Value, Stealth.Client.GetBackpackID());
+                        Lumberjacker.BlueBeetle.DoubleClick();
+                        if (Checkweight())
+                        {
+                            Lumberjacker.Gohomeandunload();
+                            Stealth.Client.newMoveXY(tree.X, tree.Y, true, 1, true);
+                        }
+                    }
+                    else
+                    {
+                        Lumberjacker.Gohomeandunload();
+                        Stealth.Client.newMoveXY(tree.X, tree.Y, true, 1, true);
+                    }
                 }
                 if ((axe.DoubleClick()) && (TargetHelper.GetTarget().WaitForTarget(2000)))
                     // try to doubleclick and wait until tárget cursor appear
