@@ -47,14 +47,17 @@ namespace TLumberjack
         public static bool Actionperform;
         public static bool Loadused;
         public static bool Beetle;
+
+
+
         public Lumberjacker() 
         {
             if (UacHelper.IsProcessElevated)
             {
                 InitializeComponent();
-                Stealth.Client.Speech += speech;
-                Stealth.Client.ClilocSpeech += OnClilocSpeech;
-                Stealth.Client.Buff_DebuffSystem += buffsystem;
+                Stealth.Client.Speech += LumberEvents.speech;
+                Stealth.Client.ClilocSpeech += LumberEvents.OnClilocSpeech;
+                Stealth.Client.Buff_DebuffSystem += LumberEvents.Buffsystem;
                 //ScriptDotNet2.Stealth.Default.GetService<IEventSystemService>().ClilocSpeech += OnClilocSpeech;
                 cancelbutton.Enabled = false;
                 lumberjackbutton.Enabled = false;
@@ -68,26 +71,9 @@ namespace TLumberjack
                 Environment.Exit(1);
             }
         }
-       
-        private static void OnClilocSpeech(object sender, ClilocSpeechEventArgs e)
-        {
-      
-            if (e.Text.Contains("There's not enough wood here to harvest.")) Speechhit = true;
-            if (e.Text.Contains("Thou art too encumbered to move.")) Encumbered= true;
-            if (e.Text.Contains("You must wait to perform another action.")) Actionperform = true;
-        }
-        private static void buffsystem(object sender, Buff_DebuffSystemEventArgs e)
-        {
-            //MessageBox.Show(String.Format("{0}",(Buffs)e.ObjectId));
-        }
-        private static void speech(object sender, SpeechEventArgs e)
-        {
-            //MessageBox.Show(e.Text);
-            
-        }
         public bool SetInputs()
         {
-            Maxweight = StealthAPI.Stealth.Client.GetSelfMaxWeight() - 30;
+            Maxweight = Stealth.Client.GetSelfMaxWeight() - 30;
             Invoke((MethodInvoker)
                 delegate { Osi = comboBox1.Text == @"OSI"; });
             if (endtimebox == null || homerunebox == null || bankrunebox == null || firstrunebox == null ||
@@ -105,13 +91,6 @@ namespace TLumberjack
         {
             if (!backgroundWorker2.IsBusy)backgroundWorker2.RunWorkerAsync();
         }
-        private static void ContainerSetup()
-        {
-            MessageBox.Show(@"Select your Container");
-            Housecontainer = new Item(new Serial(Getitem()));
-            Housecontainer.DoubleClick();
-        }
-
         private void button3_Click(object sender, EventArgs e)
         {
             if (SetInputs())
@@ -175,6 +154,12 @@ namespace TLumberjack
             return axe;
 
             #endregion
+        }
+        public static void ContainerSetup()
+        {
+            MessageBox.Show(@"Select your Container");
+            Housecontainer = new Item(new Serial(Getitem()));
+            Housecontainer.DoubleClick();
         }
         private void BeetleSetup()
         {
