@@ -221,6 +221,7 @@ namespace TLumberjack
                         MoveItems(Extras, Lumberjacker.BeetleContainer.Serial.Value, Stealth.Client.GetBackpackID());
                         MoveItems(Lumbers, Lumberjacker.BeetleContainer.Serial.Value, Stealth.Client.GetBackpackID());
                         Lumberjacker.BlueBeetle.DoubleClick();
+                        Stealth.Client.Wait(1100); //wait 1 second
                         if (Checkweight())
                         {
                             Lumberjacker.Gohomeandunload();
