@@ -40,7 +40,6 @@ namespace TLumberjack
         public static int Runetouse; //current rune on recall
         public static Item Runebook;
         public static int Treearea; //  Area to look for tree
-        public static int Maxweight;
         public static bool Speechhit;
         public static bool Encumbered;
         public static bool Actionperform;
@@ -48,6 +47,11 @@ namespace TLumberjack
         public static bool Beetle;
         public static Mobile BlueBeetle;
         public static ScriptSDK.Items.Container BeetleContainer;
+
+        public static int MaxWeight
+        {
+            get { return Convert.ToInt32(maxweighttbox.Text); }
+        }
 
 
         public Lumberjacker() 
@@ -63,6 +67,7 @@ namespace TLumberjack
                 //ScriptDotNet2.Stealth.Default.GetService<IEventSystemService>().ClilocSpeech += OnClilocSpeech;
                 #endregion
                 #region Buttons
+                maxweighttbox.Text = Convert.ToString(30);
                 cancelbutton.Enabled = false;
                 lumberjackbutton.Enabled = false;
                 loadbutton.Enabled = true;
@@ -93,7 +98,6 @@ namespace TLumberjack
         }
         public bool SetInputs()
         {
-            Maxweight = Stealth.Client.GetSelfMaxWeight() - 30;
             Invoke((MethodInvoker)
                 delegate { Osi = comboBox1.Text == @"OSI"; });
             if (endtimebox == null || homerunebox == null || bankrunebox == null || firstrunebox == null ||
@@ -101,6 +105,7 @@ namespace TLumberjack
             {
                 return false;
             }
+            if (!int.TryParse(endtimebox.Text, out Minutes)) return false;
             if (!int.TryParse(endtimebox.Text, out Minutes)) return false;
             if (!int.TryParse(homerunebox.Text, out Homerune)) return false;
             if (!int.TryParse(bankrunebox.Text, out Bankrune)) return false;

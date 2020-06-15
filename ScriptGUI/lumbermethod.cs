@@ -29,7 +29,6 @@ namespace TLumberjack
         public static List<ushort> Extras = new List<ushort>();
         public static List<ushort> Lumbers = new List<ushort>();
         public static UOEntity Theaxe;
-        public static int weight;
 
 
 
@@ -59,13 +58,13 @@ namespace TLumberjack
         }
         private static bool Checkweight()
         {
-
-            weight = Stealth.Client.GetSelfWeight();
-            if (weight < Lumberjacker.Maxweight) return weight >= Lumberjacker.Maxweight;
+            var max = Stealth.Client.GetSelfMaxWeight();
+            var weight = Stealth.Client.GetSelfWeight();
+            if (weight < (max - Lumberjacker.MaxWeight)) return false;
             LogToBoard();
             Stealth.Client.Wait(1000);
             weight = Stealth.Client.GetSelfWeight();
-            return weight >= Lumberjacker.Maxweight;
+            return weight >= (max - Lumberjacker.MaxWeight);
         }
 
         private static void LumberCount (Item log)
@@ -143,12 +142,18 @@ namespace TLumberjack
                     Moveagain(log, container);
             }
         }
-        private static void MoveItems(List<ushort> Items, uint tocontainer, uint fromcontainer)
+        private static void MoveItems(List<ushort> Items, uint tocontainer, uint fromcontainer, bool countitems)
         {
             foreach (var item in Items.Select(extra => ushort.Parse(extra.ToString())).Select(move => Scanner.Find<Item>(move, 0xFFFF, fromcontainer, true)).SelectMany(item => item))
             {
-                if (Enum.IsDefined(typeof(LumberItems), (int)item.ObjectType)) LumberItemCount(item);
-                else LumberCount(item);
+                if (countitems)
+                {
+                    if (Enum.IsDefined(typeof(LumberItems), (int)item.ObjectType))
+                    {
+                        LumberItemCount(item);
+                    }
+                    else LumberCount(item);
+                }
                 Stealth.Client.MoveItem(item.Serial.Value, item.Amount, tocontainer, 0, 0, 0);
                 Stealth.Client.Wait(1000);
                 while (Lumberjacker.Actionperform)
@@ -163,14 +168,14 @@ namespace TLumberjack
 
             //MoveLogs(mycontainer);
             //MoveBoards(mycontainer);
-            MoveItems(Extras, mycontainer.Serial.Value, Stealth.Client.GetBackpackID());
-            MoveItems(Lumbers, mycontainer.Serial.Value, Stealth.Client.GetBackpackID());
+            MoveItems(Extras, mycontainer.Serial.Value, Stealth.Client.GetBackpackID(),true);
+            MoveItems(Lumbers, mycontainer.Serial.Value, Stealth.Client.GetBackpackID(),true);
             if (Lumberjacker.Beetle)
             {
                 PlayerMobile.GetPlayer().DoubleClick();
                 Lumberjacker.BeetleContainer.DoubleClick();
-                MoveItems(Extras, mycontainer.Serial.Value,Lumberjacker.BeetleContainer.Serial.Value);
-                MoveItems(Lumbers, mycontainer.Serial.Value, Lumberjacker.BeetleContainer.Serial.Value);
+                MoveItems(Extras, mycontainer.Serial.Value,Lumberjacker.BeetleContainer.Serial.Value,true);
+                MoveItems(Lumbers, mycontainer.Serial.Value, Lumberjacker.BeetleContainer.Serial.Value,true);
                 Lumberjacker.BlueBeetle.DoubleClick();
             }
 
@@ -218,8 +223,8 @@ namespace TLumberjack
                         PlayerMobile.GetPlayer().DoubleClick();
                         Lumberjacker.BeetleContainer.DoubleClick();
                         Stealth.Client.Wait(1100); //wait 1 second
-                        MoveItems(Extras, Lumberjacker.BeetleContainer.Serial.Value, Stealth.Client.GetBackpackID());
-                        MoveItems(Lumbers, Lumberjacker.BeetleContainer.Serial.Value, Stealth.Client.GetBackpackID());
+                        MoveItems(Extras, Lumberjacker.BeetleContainer.Serial.Value, Stealth.Client.GetBackpackID(), false);
+                        MoveItems(Lumbers, Lumberjacker.BeetleContainer.Serial.Value, Stealth.Client.GetBackpackID(), false);
                         Lumberjacker.BlueBeetle.DoubleClick();
                         Stealth.Client.Wait(1100); //wait 1 second
                         if (Checkweight())

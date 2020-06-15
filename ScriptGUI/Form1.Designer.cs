@@ -84,12 +84,14 @@
             this.fungibox = new System.Windows.Forms.TextBox();
             this.plantbox = new System.Windows.Forms.TextBox();
             this.amberbox = new System.Windows.Forms.TextBox();
+            this.maxweightlbl = new System.Windows.Forms.Label();
+            maxweighttbox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // Runebooktbox
             // 
             this.Runebooktbox.Location = new System.Drawing.Point(108, 57);
-            this.Runebooktbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Runebooktbox.Margin = new System.Windows.Forms.Padding(2);
             this.Runebooktbox.Name = "Runebooktbox";
             this.Runebooktbox.ReadOnly = true;
             this.Runebooktbox.Size = new System.Drawing.Size(76, 20);
@@ -98,7 +100,7 @@
             // recallstatus
             // 
             this.recallstatus.Location = new System.Drawing.Point(218, 105);
-            this.recallstatus.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.recallstatus.Margin = new System.Windows.Forms.Padding(2);
             this.recallstatus.Name = "recallstatus";
             this.recallstatus.ReadOnly = true;
             this.recallstatus.Size = new System.Drawing.Size(167, 20);
@@ -107,7 +109,7 @@
             // lumberjackbutton
             // 
             this.lumberjackbutton.Location = new System.Drawing.Point(166, 136);
-            this.lumberjackbutton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lumberjackbutton.Margin = new System.Windows.Forms.Padding(2);
             this.lumberjackbutton.Name = "lumberjackbutton";
             this.lumberjackbutton.Size = new System.Drawing.Size(98, 19);
             this.lumberjackbutton.TabIndex = 4;
@@ -118,7 +120,7 @@
             // axetextbox
             // 
             this.axetextbox.Location = new System.Drawing.Point(218, 57);
-            this.axetextbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.axetextbox.Margin = new System.Windows.Forms.Padding(2);
             this.axetextbox.Name = "axetextbox";
             this.axetextbox.ReadOnly = true;
             this.axetextbox.Size = new System.Drawing.Size(76, 20);
@@ -167,7 +169,7 @@
             // startsetup
             // 
             this.startsetup.Location = new System.Drawing.Point(4, 136);
-            this.startsetup.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.startsetup.Margin = new System.Windows.Forms.Padding(2);
             this.startsetup.Name = "startsetup";
             this.startsetup.Size = new System.Drawing.Size(98, 19);
             this.startsetup.TabIndex = 11;
@@ -178,7 +180,7 @@
             // endtimebox
             // 
             this.endtimebox.Location = new System.Drawing.Point(5, 173);
-            this.endtimebox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.endtimebox.Margin = new System.Windows.Forms.Padding(2);
             this.endtimebox.Name = "endtimebox";
             this.endtimebox.Size = new System.Drawing.Size(35, 20);
             this.endtimebox.TabIndex = 12;
@@ -197,7 +199,7 @@
             // homerunebox
             // 
             this.homerunebox.Location = new System.Drawing.Point(5, 197);
-            this.homerunebox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.homerunebox.Margin = new System.Windows.Forms.Padding(2);
             this.homerunebox.Name = "homerunebox";
             this.homerunebox.Size = new System.Drawing.Size(35, 20);
             this.homerunebox.TabIndex = 14;
@@ -205,7 +207,7 @@
             // bankrunebox
             // 
             this.bankrunebox.Location = new System.Drawing.Point(5, 220);
-            this.bankrunebox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bankrunebox.Margin = new System.Windows.Forms.Padding(2);
             this.bankrunebox.Name = "bankrunebox";
             this.bankrunebox.Size = new System.Drawing.Size(35, 20);
             this.bankrunebox.TabIndex = 15;
@@ -213,7 +215,7 @@
             // firstrunebox
             // 
             this.firstrunebox.Location = new System.Drawing.Point(5, 244);
-            this.firstrunebox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.firstrunebox.Margin = new System.Windows.Forms.Padding(2);
             this.firstrunebox.Name = "firstrunebox";
             this.firstrunebox.Size = new System.Drawing.Size(35, 20);
             this.firstrunebox.TabIndex = 16;
@@ -251,7 +253,7 @@
             // lastrunebox
             // 
             this.lastrunebox.Location = new System.Drawing.Point(5, 267);
-            this.lastrunebox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lastrunebox.Margin = new System.Windows.Forms.Padding(2);
             this.lastrunebox.Name = "lastrunebox";
             this.lastrunebox.Size = new System.Drawing.Size(35, 20);
             this.lastrunebox.TabIndex = 20;
@@ -273,7 +275,7 @@
             "OSI",
             "RebirthUO"});
             this.comboBox1.Location = new System.Drawing.Point(154, 8);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(92, 21);
             this.comboBox1.TabIndex = 22;
@@ -282,7 +284,7 @@
             // treeareatbox
             // 
             this.treeareatbox.Location = new System.Drawing.Point(4, 291);
-            this.treeareatbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.treeareatbox.Margin = new System.Windows.Forms.Padding(2);
             this.treeareatbox.Name = "treeareatbox";
             this.treeareatbox.Size = new System.Drawing.Size(36, 20);
             this.treeareatbox.TabIndex = 23;
@@ -313,7 +315,7 @@
             // cancelbutton
             // 
             this.cancelbutton.Location = new System.Drawing.Point(106, 136);
-            this.cancelbutton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cancelbutton.Margin = new System.Windows.Forms.Padding(2);
             this.cancelbutton.Name = "cancelbutton";
             this.cancelbutton.Size = new System.Drawing.Size(56, 19);
             this.cancelbutton.TabIndex = 25;
@@ -323,8 +325,8 @@
             // 
             // regbox
             // 
-            this.regbox.Location = new System.Drawing.Point(149, 173);
-            this.regbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.regbox.Location = new System.Drawing.Point(163, 173);
+            this.regbox.Margin = new System.Windows.Forms.Padding(2);
             this.regbox.Name = "regbox";
             this.regbox.ReadOnly = true;
             this.regbox.Size = new System.Drawing.Size(49, 20);
@@ -332,8 +334,8 @@
             // 
             // oakbox
             // 
-            this.oakbox.Location = new System.Drawing.Point(149, 197);
-            this.oakbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.oakbox.Location = new System.Drawing.Point(163, 197);
+            this.oakbox.Margin = new System.Windows.Forms.Padding(2);
             this.oakbox.Name = "oakbox";
             this.oakbox.ReadOnly = true;
             this.oakbox.Size = new System.Drawing.Size(49, 20);
@@ -341,8 +343,8 @@
             // 
             // ashbox
             // 
-            this.ashbox.Location = new System.Drawing.Point(149, 220);
-            this.ashbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ashbox.Location = new System.Drawing.Point(163, 220);
+            this.ashbox.Margin = new System.Windows.Forms.Padding(2);
             this.ashbox.Name = "ashbox";
             this.ashbox.ReadOnly = true;
             this.ashbox.Size = new System.Drawing.Size(49, 20);
@@ -350,8 +352,8 @@
             // 
             // yewbox
             // 
-            this.yewbox.Location = new System.Drawing.Point(149, 244);
-            this.yewbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.yewbox.Location = new System.Drawing.Point(163, 244);
+            this.yewbox.Margin = new System.Windows.Forms.Padding(2);
             this.yewbox.Name = "yewbox";
             this.yewbox.ReadOnly = true;
             this.yewbox.Size = new System.Drawing.Size(49, 20);
@@ -359,8 +361,8 @@
             // 
             // bloodbox
             // 
-            this.bloodbox.Location = new System.Drawing.Point(149, 266);
-            this.bloodbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bloodbox.Location = new System.Drawing.Point(163, 266);
+            this.bloodbox.Margin = new System.Windows.Forms.Padding(2);
             this.bloodbox.Name = "bloodbox";
             this.bloodbox.ReadOnly = true;
             this.bloodbox.Size = new System.Drawing.Size(49, 20);
@@ -368,8 +370,8 @@
             // 
             // hwbox
             // 
-            this.hwbox.Location = new System.Drawing.Point(149, 292);
-            this.hwbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.hwbox.Location = new System.Drawing.Point(163, 292);
+            this.hwbox.Margin = new System.Windows.Forms.Padding(2);
             this.hwbox.Name = "hwbox";
             this.hwbox.ReadOnly = true;
             this.hwbox.Size = new System.Drawing.Size(49, 20);
@@ -378,7 +380,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(202, 176);
+            this.label11.Location = new System.Drawing.Point(216, 176);
             this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(44, 13);
@@ -388,7 +390,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(202, 199);
+            this.label12.Location = new System.Drawing.Point(216, 199);
             this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(27, 13);
@@ -398,7 +400,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(202, 224);
+            this.label13.Location = new System.Drawing.Point(216, 224);
             this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(25, 13);
@@ -408,7 +410,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(202, 246);
+            this.label14.Location = new System.Drawing.Point(216, 246);
             this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(28, 13);
@@ -418,7 +420,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(202, 269);
+            this.label15.Location = new System.Drawing.Point(216, 269);
             this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(60, 13);
@@ -428,7 +430,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(202, 293);
+            this.label16.Location = new System.Drawing.Point(216, 293);
             this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(59, 13);
@@ -438,7 +440,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(147, 158);
+            this.label17.Location = new System.Drawing.Point(161, 158);
             this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(89, 13);
@@ -447,8 +449,8 @@
             // 
             // frostbox
             // 
-            this.frostbox.Location = new System.Drawing.Point(149, 315);
-            this.frostbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.frostbox.Location = new System.Drawing.Point(163, 315);
+            this.frostbox.Margin = new System.Windows.Forms.Padding(2);
             this.frostbox.Name = "frostbox";
             this.frostbox.ReadOnly = true;
             this.frostbox.Size = new System.Drawing.Size(49, 20);
@@ -457,7 +459,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(202, 318);
+            this.label18.Location = new System.Drawing.Point(216, 318);
             this.label18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(56, 13);
@@ -487,7 +489,7 @@
             // statustext
             // 
             this.statustext.Location = new System.Drawing.Point(4, 105);
-            this.statustext.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.statustext.Margin = new System.Windows.Forms.Padding(2);
             this.statustext.Name = "statustext";
             this.statustext.ReadOnly = true;
             this.statustext.Size = new System.Drawing.Size(180, 20);
@@ -496,7 +498,7 @@
             // savebutton
             // 
             this.savebutton.Location = new System.Drawing.Point(268, 136);
-            this.savebutton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.savebutton.Margin = new System.Windows.Forms.Padding(2);
             this.savebutton.Name = "savebutton";
             this.savebutton.Size = new System.Drawing.Size(56, 19);
             this.savebutton.TabIndex = 44;
@@ -507,7 +509,7 @@
             // loadbutton
             // 
             this.loadbutton.Location = new System.Drawing.Point(329, 136);
-            this.loadbutton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.loadbutton.Margin = new System.Windows.Forms.Padding(2);
             this.loadbutton.Name = "loadbutton";
             this.loadbutton.Size = new System.Drawing.Size(56, 19);
             this.loadbutton.TabIndex = 45;
@@ -518,7 +520,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(321, 269);
+            this.label20.Location = new System.Drawing.Point(335, 269);
             this.label20.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(29, 13);
@@ -528,7 +530,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(321, 246);
+            this.label21.Location = new System.Drawing.Point(335, 246);
             this.label21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(39, 13);
@@ -538,7 +540,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(321, 224);
+            this.label22.Location = new System.Drawing.Point(335, 224);
             this.label22.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(58, 13);
@@ -548,7 +550,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(321, 199);
+            this.label23.Location = new System.Drawing.Point(335, 199);
             this.label23.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(56, 13);
@@ -558,7 +560,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(321, 176);
+            this.label24.Location = new System.Drawing.Point(335, 176);
             this.label24.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(37, 13);
@@ -567,8 +569,8 @@
             // 
             // barkbox
             // 
-            this.barkbox.Location = new System.Drawing.Point(268, 266);
-            this.barkbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.barkbox.Location = new System.Drawing.Point(282, 266);
+            this.barkbox.Margin = new System.Windows.Forms.Padding(2);
             this.barkbox.Name = "barkbox";
             this.barkbox.ReadOnly = true;
             this.barkbox.Size = new System.Drawing.Size(49, 20);
@@ -576,8 +578,8 @@
             // 
             // switchbox
             // 
-            this.switchbox.Location = new System.Drawing.Point(268, 244);
-            this.switchbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.switchbox.Location = new System.Drawing.Point(282, 244);
+            this.switchbox.Margin = new System.Windows.Forms.Padding(2);
             this.switchbox.Name = "switchbox";
             this.switchbox.ReadOnly = true;
             this.switchbox.Size = new System.Drawing.Size(49, 20);
@@ -585,8 +587,8 @@
             // 
             // fungibox
             // 
-            this.fungibox.Location = new System.Drawing.Point(268, 220);
-            this.fungibox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.fungibox.Location = new System.Drawing.Point(282, 220);
+            this.fungibox.Margin = new System.Windows.Forms.Padding(2);
             this.fungibox.Name = "fungibox";
             this.fungibox.ReadOnly = true;
             this.fungibox.Size = new System.Drawing.Size(49, 20);
@@ -594,8 +596,8 @@
             // 
             // plantbox
             // 
-            this.plantbox.Location = new System.Drawing.Point(268, 197);
-            this.plantbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.plantbox.Location = new System.Drawing.Point(282, 197);
+            this.plantbox.Margin = new System.Windows.Forms.Padding(2);
             this.plantbox.Name = "plantbox";
             this.plantbox.ReadOnly = true;
             this.plantbox.Size = new System.Drawing.Size(49, 20);
@@ -603,18 +605,38 @@
             // 
             // amberbox
             // 
-            this.amberbox.Location = new System.Drawing.Point(268, 173);
-            this.amberbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.amberbox.Location = new System.Drawing.Point(282, 173);
+            this.amberbox.Margin = new System.Windows.Forms.Padding(2);
             this.amberbox.Name = "amberbox";
             this.amberbox.ReadOnly = true;
             this.amberbox.Size = new System.Drawing.Size(49, 20);
             this.amberbox.TabIndex = 46;
+            // 
+            // maxweightlbl
+            // 
+            this.maxweightlbl.AutoSize = true;
+            this.maxweightlbl.Location = new System.Drawing.Point(50, 315);
+            this.maxweightlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.maxweightlbl.Name = "maxweightlbl";
+            this.maxweightlbl.Size = new System.Drawing.Size(104, 13);
+            this.maxweightlbl.TabIndex = 57;
+            this.maxweightlbl.Text = "Max Weight Modifier";
+            // 
+            // maxweighttbox
+            // 
+            maxweighttbox.Location = new System.Drawing.Point(4, 315);
+            maxweighttbox.Margin = new System.Windows.Forms.Padding(2);
+            maxweighttbox.Name = "maxweighttbox";
+            maxweighttbox.Size = new System.Drawing.Size(36, 20);
+            maxweighttbox.TabIndex = 56;
             // 
             // Lumberjacker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(392, 343);
+            this.Controls.Add(this.maxweightlbl);
+            this.Controls.Add(maxweighttbox);
             this.Controls.Add(this.label20);
             this.Controls.Add(this.label21);
             this.Controls.Add(this.label22);
@@ -668,7 +690,7 @@
             this.Controls.Add(this.Runebooktbox);
             this.Controls.Add(this.cancelbutton);
             this.Controls.Add(this.lumberjackbutton);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Lumberjacker";
             this.Text = "Lumberjacker";
             this.ResumeLayout(false);
@@ -700,7 +722,6 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TextBox treeareatbox;
         private System.Windows.Forms.Label label10;
-        private static System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.Button cancelbutton;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
@@ -733,6 +754,9 @@
         public System.Windows.Forms.TextBox fungibox;
         public System.Windows.Forms.TextBox plantbox;
         public System.Windows.Forms.TextBox amberbox;
+        private System.Windows.Forms.Label maxweightlbl;
+        public static System.Windows.Forms.TextBox maxweighttbox;
+        private static System.ComponentModel.BackgroundWorker backgroundWorker2;
         public static System.ComponentModel.BackgroundWorker backgroundWorker3;
         public static System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
