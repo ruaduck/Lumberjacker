@@ -37,18 +37,18 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.startsetup = new System.Windows.Forms.Button();
-            this.endtimebox = new System.Windows.Forms.TextBox();
+            endtimebox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.homerunebox = new System.Windows.Forms.TextBox();
-            this.bankrunebox = new System.Windows.Forms.TextBox();
-            this.firstrunebox = new System.Windows.Forms.TextBox();
+            homerunebox = new System.Windows.Forms.TextBox();
+            bankrunebox = new System.Windows.Forms.TextBox();
+            firstrunebox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.lastrunebox = new System.Windows.Forms.TextBox();
+            lastrunebox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.treeareatbox = new System.Windows.Forms.TextBox();
+            treeareatbox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker3 = new System.ComponentModel.BackgroundWorker();
@@ -179,12 +179,12 @@
             // 
             // endtimebox
             // 
-            this.endtimebox.Location = new System.Drawing.Point(5, 173);
-            this.endtimebox.Margin = new System.Windows.Forms.Padding(2);
-            this.endtimebox.Name = "endtimebox";
-            this.endtimebox.Size = new System.Drawing.Size(35, 20);
-            this.endtimebox.TabIndex = 12;
-            this.endtimebox.TextChanged += new System.EventHandler(this.endtimebox_TextChanged);
+            endtimebox.Location = new System.Drawing.Point(5, 173);
+            endtimebox.Margin = new System.Windows.Forms.Padding(2);
+            endtimebox.Name = "endtimebox";
+            endtimebox.Size = new System.Drawing.Size(35, 20);
+            endtimebox.TabIndex = 12;
+            endtimebox.TextChanged += new System.EventHandler(this.endtimebox_TextChanged);
             // 
             // label5
             // 
@@ -198,27 +198,27 @@
             // 
             // homerunebox
             // 
-            this.homerunebox.Location = new System.Drawing.Point(5, 197);
-            this.homerunebox.Margin = new System.Windows.Forms.Padding(2);
-            this.homerunebox.Name = "homerunebox";
-            this.homerunebox.Size = new System.Drawing.Size(35, 20);
-            this.homerunebox.TabIndex = 14;
+            homerunebox.Location = new System.Drawing.Point(5, 197);
+            homerunebox.Margin = new System.Windows.Forms.Padding(2);
+            homerunebox.Name = "homerunebox";
+            homerunebox.Size = new System.Drawing.Size(35, 20);
+            homerunebox.TabIndex = 14;
             // 
             // bankrunebox
             // 
-            this.bankrunebox.Location = new System.Drawing.Point(5, 220);
-            this.bankrunebox.Margin = new System.Windows.Forms.Padding(2);
-            this.bankrunebox.Name = "bankrunebox";
-            this.bankrunebox.Size = new System.Drawing.Size(35, 20);
-            this.bankrunebox.TabIndex = 15;
+            bankrunebox.Location = new System.Drawing.Point(5, 220);
+            bankrunebox.Margin = new System.Windows.Forms.Padding(2);
+            bankrunebox.Name = "bankrunebox";
+            bankrunebox.Size = new System.Drawing.Size(35, 20);
+            bankrunebox.TabIndex = 15;
             // 
             // firstrunebox
             // 
-            this.firstrunebox.Location = new System.Drawing.Point(5, 244);
-            this.firstrunebox.Margin = new System.Windows.Forms.Padding(2);
-            this.firstrunebox.Name = "firstrunebox";
-            this.firstrunebox.Size = new System.Drawing.Size(35, 20);
-            this.firstrunebox.TabIndex = 16;
+            firstrunebox.Location = new System.Drawing.Point(5, 244);
+            firstrunebox.Margin = new System.Windows.Forms.Padding(2);
+            firstrunebox.Name = "firstrunebox";
+            firstrunebox.Size = new System.Drawing.Size(35, 20);
+            firstrunebox.TabIndex = 16;
             // 
             // label6
             // 
@@ -252,11 +252,11 @@
             // 
             // lastrunebox
             // 
-            this.lastrunebox.Location = new System.Drawing.Point(5, 267);
-            this.lastrunebox.Margin = new System.Windows.Forms.Padding(2);
-            this.lastrunebox.Name = "lastrunebox";
-            this.lastrunebox.Size = new System.Drawing.Size(35, 20);
-            this.lastrunebox.TabIndex = 20;
+            lastrunebox.Location = new System.Drawing.Point(5, 267);
+            lastrunebox.Margin = new System.Windows.Forms.Padding(2);
+            lastrunebox.Name = "lastrunebox";
+            lastrunebox.Size = new System.Drawing.Size(35, 20);
+            lastrunebox.TabIndex = 20;
             // 
             // label9
             // 
@@ -283,11 +283,11 @@
             // 
             // treeareatbox
             // 
-            this.treeareatbox.Location = new System.Drawing.Point(4, 291);
-            this.treeareatbox.Margin = new System.Windows.Forms.Padding(2);
-            this.treeareatbox.Name = "treeareatbox";
-            this.treeareatbox.Size = new System.Drawing.Size(36, 20);
-            this.treeareatbox.TabIndex = 23;
+            treeareatbox.Location = new System.Drawing.Point(4, 291);
+            treeareatbox.Margin = new System.Windows.Forms.Padding(2);
+            treeareatbox.Name = "treeareatbox";
+            treeareatbox.Size = new System.Drawing.Size(36, 20);
+            treeareatbox.TabIndex = 23;
             // 
             // label10
             // 
@@ -668,18 +668,18 @@
             this.Controls.Add(this.oakbox);
             this.Controls.Add(this.regbox);
             this.Controls.Add(this.label10);
-            this.Controls.Add(this.treeareatbox);
+            this.Controls.Add(treeareatbox);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.lastrunebox);
+            this.Controls.Add(lastrunebox);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.firstrunebox);
-            this.Controls.Add(this.bankrunebox);
-            this.Controls.Add(this.homerunebox);
+            this.Controls.Add(firstrunebox);
+            this.Controls.Add(bankrunebox);
+            this.Controls.Add(homerunebox);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.endtimebox);
+            this.Controls.Add(endtimebox);
             this.Controls.Add(this.startsetup);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -709,18 +709,18 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button startsetup;
-        private System.Windows.Forms.TextBox endtimebox;
+        private static System.Windows.Forms.TextBox endtimebox;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox homerunebox;
-        private System.Windows.Forms.TextBox bankrunebox;
-        private System.Windows.Forms.TextBox firstrunebox;
+        private static System.Windows.Forms.TextBox homerunebox;
+        private static System.Windows.Forms.TextBox bankrunebox;
+        private static System.Windows.Forms.TextBox firstrunebox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox lastrunebox;
+        private static System.Windows.Forms.TextBox lastrunebox;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.TextBox treeareatbox;
+        private static System.Windows.Forms.TextBox treeareatbox;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button cancelbutton;
         private System.Windows.Forms.Label label11;

@@ -147,20 +147,8 @@ namespace TLumberjack
         private string Shard { get; set;} 
 
         private GumpButton RenameButton { get; set; }
-
+        
         public Runebook(Serial serial, RuneBookConfig config)
-            : base(serial)
-        {
-            GumpType = 0x554B87F3;
-            GumpDelay = 1000;
-            Entries = new List<RunebookEntry>();
-            Uses = new Range(0, 0);
-            DefaultRune = -1;
-            Configuration = config;
-            Shard = "FS";
-        }
-
-        public Runebook(Serial serial, RuneBookConfig config, string osi)
             : base(serial)
         {
             GumpType = 0x0059;
@@ -169,15 +157,12 @@ namespace TLumberjack
             Uses = new Range(0, 0);
             DefaultRune = -1;
             Configuration = config;
-            Shard = osi;
+            Shard = "OSI";
         }
         public Runebook(uint value, RuneBookConfig config)
             : this(new Serial(value), config)
         { }
-        public Runebook(uint value, RuneBookConfig config, string osi)
-            : this(new Serial(value), config, osi)
-        { }
-
+        
         public bool Parse()
         {
             if (!Close() || !Open())

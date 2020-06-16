@@ -18,7 +18,7 @@ namespace TLumberjack
     public enum Lumber : int
     {
         Logs = 0x1BDD,
-        Boards = 0x1BD7
+        Boards = 0x1BD7,
     }
     public enum LumberColor : int
     {
@@ -29,6 +29,7 @@ namespace TLumberjack
         Yew= 0x4A8,
         HeartWood = 0x4A9,
         Bloodwood = 0x4AA,
-        Frostwood = 0x47F
+        Frostwood = 0x47F,
     }
+    
 }

@@ -35,10 +35,10 @@ namespace TLumberjack
 
         public static void Setvariables()
         {
-            Extras.Add((ushort)LumberItems.Fungi); 
-            Extras.Add((ushort)LumberItems.Bark); 
-            Extras.Add((ushort)LumberItems.Switch); 
-            Extras.Add((ushort)LumberItems.Plant); 
+            Extras.Add((ushort)LumberItems.Fungi);
+            Extras.Add((ushort)LumberItems.Bark);
+            Extras.Add((ushort)LumberItems.Switch);
+            Extras.Add((ushort)LumberItems.Plant);
             Extras.Add((ushort)LumberItems.Amber);
             Lumbers.Add((ushort)Lumber.Boards);
             Lumbers.Add((ushort)Lumber.Logs);
@@ -49,12 +49,12 @@ namespace TLumberjack
             var logs = Scanner.Find<Item>((ushort)Lumber.Logs, 0xFFFF, Stealth.Client.GetBackpackID(), true);
             foreach (var log in logs)
             {
-                Stealth.Client.AddToSystemJournal(String.Format("Converting {0} Logs to boards",(LumberColor)log.Color));
+                Stealth.Client.AddToSystemJournal(String.Format("Converting {0} Logs to boards", (LumberColor)log.Color));
                 player.Paperdoll.TwoHanded.DoubleClick();
                 var target = new EntityTarget(1000);
-                target.Action(log);               
+                target.Action(log);
             }
-            
+
         }
         private static bool Checkweight()
         {
@@ -67,7 +67,7 @@ namespace TLumberjack
             return weight >= (max - Lumberjacker.MaxWeight);
         }
 
-        private static void LumberCount (Item log)
+        private static void LumberCount(Item log)
         {
             var color = Stealth.Client.GetColor(log.Serial.Value);
             switch (color)
@@ -94,7 +94,7 @@ namespace TLumberjack
                     Frost += log.Amount;
                     break;
             }
-            Stealth.Client.AddToSystemJournal(string.Format("Dropping off {0} {1} lumber",log.Amount, (LumberColor)color));
+            Stealth.Client.AddToSystemJournal(string.Format("Dropping off {0} {1} lumber", log.Amount, (LumberColor)color));
         }
         private static void LumberItemCount(Item item)
         {
@@ -168,14 +168,14 @@ namespace TLumberjack
 
             //MoveLogs(mycontainer);
             //MoveBoards(mycontainer);
-            MoveItems(Extras, mycontainer.Serial.Value, Stealth.Client.GetBackpackID(),true);
-            MoveItems(Lumbers, mycontainer.Serial.Value, Stealth.Client.GetBackpackID(),true);
+            MoveItems(Extras, mycontainer.Serial.Value, Stealth.Client.GetBackpackID(), true);
+            MoveItems(Lumbers, mycontainer.Serial.Value, Stealth.Client.GetBackpackID(), true);
             if (Lumberjacker.Beetle)
             {
                 PlayerMobile.GetPlayer().DoubleClick();
                 Lumberjacker.BeetleContainer.DoubleClick();
-                MoveItems(Extras, mycontainer.Serial.Value,Lumberjacker.BeetleContainer.Serial.Value,true);
-                MoveItems(Lumbers, mycontainer.Serial.Value, Lumberjacker.BeetleContainer.Serial.Value,true);
+                MoveItems(Extras, mycontainer.Serial.Value, Lumberjacker.BeetleContainer.Serial.Value, true);
+                MoveItems(Lumbers, mycontainer.Serial.Value, Lumberjacker.BeetleContainer.Serial.Value, true);
                 Lumberjacker.BlueBeetle.DoubleClick();
             }
 
@@ -249,5 +249,5 @@ namespace TLumberjack
             }
         }
     }
-    
+
 }

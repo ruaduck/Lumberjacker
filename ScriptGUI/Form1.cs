@@ -19,8 +19,7 @@ using ScriptSDK;
 using ScriptSDK.Engines;
 using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
-//using ScriptDotNet2;
-//using ScriptDotNet2.Services;
+
 
 namespace TLumberjack
 {
@@ -31,15 +30,10 @@ namespace TLumberjack
         public Serial AxeSerial;
         public static DateTime Endtime;
         public static DateTime Starttime;
-        public static int Minutes; //Minutes to Run
-        public static int Homerune; // Rune Home
-        public static int Bankrune;  //  Bank Rune
-        public static int Firstrune; // First Lumberjacking Rune
-        public static int Lastrune; // Last Lumberjacking Rune
         public static bool Osi; // OSI = True; RebirthUO = False;
         public static int Runetouse; //current rune on recall
-        public static Item Runebook;
-        public static int Treearea; //  Area to look for tree
+        public static Runebook Runebook;
+
         public static bool Speechhit;
         public static bool Encumbered;
         public static bool Actionperform;
@@ -47,14 +41,15 @@ namespace TLumberjack
         public static bool Beetle;
         public static Mobile BlueBeetle;
         public static ScriptSDK.Items.Container BeetleContainer;
+        public static int Minutes => Convert.ToInt32(endtimebox.Text);
+        public static int Homerune => Convert.ToInt32(homerunebox.Text);
+        public static int Bankrune => Convert.ToInt32(bankrunebox.Text);
+        public static int Firstrune => Convert.ToInt32(firstrunebox.Text);
+        public static int Lastrune => Convert.ToInt32(lastrunebox.Text);
+        public static int MaxWeight => Convert.ToInt32(maxweighttbox.Text);
+        public static int Treearea => Convert.ToInt32(treeareatbox.Text);
 
-        public static int MaxWeight
-        {
-            get { return Convert.ToInt32(maxweighttbox.Text); }
-        }
-
-
-        public Lumberjacker() 
+        public Lumberjacker()
         {
 
             if (UacHelper.IsProcessElevated)
@@ -64,7 +59,6 @@ namespace TLumberjack
                 Stealth.Client.Speech += LumberEvents.speech;
                 Stealth.Client.ClilocSpeech += LumberEvents.OnClilocSpeech;
                 Stealth.Client.Buff_DebuffSystem += LumberEvents.Buffsystem;
-                //ScriptDotNet2.Stealth.Default.GetService<IEventSystemService>().ClilocSpeech += OnClilocSpeech;
                 #endregion
                 #region Buttons
                 maxweighttbox.Text = Convert.ToString(30);
@@ -101,25 +95,18 @@ namespace TLumberjack
             Invoke((MethodInvoker)
                 delegate { Osi = comboBox1.Text == @"OSI"; });
             if (endtimebox == null || homerunebox == null || bankrunebox == null || firstrunebox == null ||
-                lastrunebox == null)
-            {
-                return false;
-            }
-            if (!int.TryParse(endtimebox.Text, out Minutes)) return false;
-            if (!int.TryParse(endtimebox.Text, out Minutes)) return false;
-            if (!int.TryParse(homerunebox.Text, out Homerune)) return false;
-            if (!int.TryParse(bankrunebox.Text, out Bankrune)) return false;
-            if (!int.TryParse(treeareatbox.Text, out Treearea)) return false;
-            return int.TryParse(firstrunebox.Text, out Firstrune) && int.TryParse(lastrunebox.Text, out Lastrune);
+                lastrunebox == null) { return false; }
+            return true;
         }
         public void Setup()
         {
-            if (!backgroundWorker2.IsBusy)backgroundWorker2.RunWorkerAsync();
+            if (!backgroundWorker2.IsBusy) backgroundWorker2.RunWorkerAsync();
         }
         private void button3_Click(object sender, EventArgs e)
         {
             if (SetInputs())
             {
+                Runebook.Parse();
                 Starttime = DateTime.Now;
                 Endtime = DateTime.Now.AddMinutes((Minutes));
                 Start();
@@ -149,12 +136,21 @@ namespace TLumberjack
             }
 
             Lumbermethod.Unload(Housecontainer);
-            Travel.Recall(Runebook, Runetouse, Method, Osi);
+            Travel.Recall(Runetouse, Method, Osi);
         }
-
+        RuneBookConfig OSIconfig = new RuneBookConfig()
+        {
+            ScrollOffset = 10,
+            DropOffset = 200,
+            DefaultOffset = 300,
+            RecallOffset = 50,
+            GateOffset = 100,
+            SacredOffset = 75,
+            Jumper = 1
+        };
         private static bool GoHome()
         {
-            return Travel.Recall(Runebook, Homerune, Method, Osi);
+            return Travel.Recall(Homerune, Method, Osi);
         }
 
         #region Setups
@@ -199,7 +195,7 @@ namespace TLumberjack
         private void RunebookSetup()
         {
             MessageBox.Show(@"Select your Runebook");
-            Runebook = new Item(new Serial(Getitem()));
+            Runebook = new Runebook(new Serial(Getitem()),OSIconfig);
             #region Get Runebook Info
             Invoke((MethodInvoker)
                         delegate { Runebooktbox.Text = Runebook.Serial.Value.ToString(); });
@@ -231,18 +227,19 @@ namespace TLumberjack
                     break;
             }
             #endregion
-            
+
         }
 
         #endregion
         private void startsetup_Click(object sender, EventArgs e)
         {
             startsetup.Enabled = false;
-            Setup();    
+            Setup();
         }
+
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-           Lumberjackloop();
+            Lumberjackloop();
         }
 
         private void Lumberjackloop()
@@ -253,15 +250,15 @@ namespace TLumberjack
                 for (Runetouse = Firstrune; Runetouse < Lastrune + 1; Runetouse++)
                 {
                     Invoke((MethodInvoker)delegate { statustext.Text = string.Format("Recalling to spot {0}", Runetouse); });
-                    if (!Travel.Recall(Runebook, Runetouse, Method, Osi))
+                    if (!Travel.Recall(Runetouse, Method, Osi))
                     {
                         Invoke((MethodInvoker)
                         delegate
                         {
                             recallstatus.Text = Method + @" Failed. Trying Next Rune";
                         });
-                            continue;
-                        
+                        continue;
+
                     }
                     Lumbermethod.Lumberjack(AxeSerial, Treearea);
                     if (Endtime < DateTime.Now) backgroundWorker1.CancelAsync();
@@ -278,9 +275,11 @@ namespace TLumberjack
             Lumbermethod.Unload(Housecontainer);
             MessageBox.Show(string.Format("We have ran for {0} minutes. Thank you! ", endtimebox.Text));
             Invoke((MethodInvoker)
-                delegate {
+                delegate
+                {
                     savebutton.Enabled = true;
-                    lumberjackbutton.Enabled = true; });
+                    lumberjackbutton.Enabled = true;
+                });
             Clearcounts();
         }
 
@@ -304,25 +303,25 @@ namespace TLumberjack
         {
             if (SetInputs())
             {
-                
+
                 RecallSetup();
                 RunebookSetup();
                 AxeSerial = AxeSetup();
                 Invoke((MethodInvoker)
                     delegate
                     {
-                        recallstatus.Text = Travel.Recall(Runebook, Homerune, Method, Osi)
+                        recallstatus.Text = Travel.Recall(Homerune, Method, Osi)
                             ? "Recalled"
                             : "Recall Failed";
                     });
                 ContainerSetup();
                 Lumbermethod.Unload(Housecontainer);
-                Invoke((MethodInvoker) delegate
-                {
-                    Text = PlayerMobile.GetPlayer().Name + @" - Lumberjacker";
-                    lumberjackbutton.Enabled = true;
-                    savebutton.Enabled = true;
-                });
+                Invoke((MethodInvoker)delegate
+               {
+                   Text = PlayerMobile.GetPlayer().Name + @" - Lumberjacker";
+                   lumberjackbutton.Enabled = true;
+                   savebutton.Enabled = true;
+               });
             }
 
             else
@@ -334,9 +333,7 @@ namespace TLumberjack
                 MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
             }
         }
-
-        
-
+               
         private void cancelbutton_Click(object sender, EventArgs e)
         {
             backgroundWorker1.CancelAsync();
@@ -348,7 +345,7 @@ namespace TLumberjack
         {
             var count = Lumbermethod.Oak + Lumbermethod.Ash + Lumbermethod.Yew + Lumbermethod.Hw + Lumbermethod.Blood +
                         Lumbermethod.Frost + Lumbermethod.Reg;
-            var timespan = DateTime.Now.Subtract ( Starttime );
+            var timespan = DateTime.Now.Subtract(Starttime);
             var span = (int)timespan.TotalMinutes;
             if (span < 1) span = 1;
             var avg = (count / span) * 60;
@@ -361,23 +358,23 @@ namespace TLumberjack
 
             if (InvokeRequired)
             {
-                Invoke((MethodInvoker) delegate
-                {
-                    oakbox.Text = Lumbermethod.Oak.ToString();
-                    ashbox.Text = Lumbermethod.Ash.ToString();
-                    yewbox.Text = Lumbermethod.Yew.ToString();
-                    hwbox.Text = Lumbermethod.Hw.ToString();
-                    bloodbox.Text = Lumbermethod.Blood.ToString();
-                    regbox.Text = Lumbermethod.Reg.ToString();
-                    frostbox.Text = Lumbermethod.Frost.ToString();
-                    amberbox.Text = Lumbermethod.Amber.ToString();
-                    fungibox.Text = Lumbermethod.Fungi.ToString();
-                    barkbox.Text = Lumbermethod.Bark.ToString();
-                    switchbox.Text = Lumbermethod.Switch.ToString();
-                    plantbox.Text = Lumbermethod.Plant.ToString();
-                    avghr.Text = Avgperhour().ToString();
-                });
-             
+                Invoke((MethodInvoker)delegate
+               {
+                   oakbox.Text = Lumbermethod.Oak.ToString();
+                   ashbox.Text = Lumbermethod.Ash.ToString();
+                   yewbox.Text = Lumbermethod.Yew.ToString();
+                   hwbox.Text = Lumbermethod.Hw.ToString();
+                   bloodbox.Text = Lumbermethod.Blood.ToString();
+                   regbox.Text = Lumbermethod.Reg.ToString();
+                   frostbox.Text = Lumbermethod.Frost.ToString();
+                   amberbox.Text = Lumbermethod.Amber.ToString();
+                   fungibox.Text = Lumbermethod.Fungi.ToString();
+                   barkbox.Text = Lumbermethod.Bark.ToString();
+                   switchbox.Text = Lumbermethod.Switch.ToString();
+                   plantbox.Text = Lumbermethod.Plant.ToString();
+                   avghr.Text = Avgperhour().ToString();
+               });
+
             }
             else
             {
@@ -399,21 +396,21 @@ namespace TLumberjack
 
         private void savebutton_Click(object sender, EventArgs e)
         {
-                    FileStream file = new FileStream(string.Format("{0}.txt", PlayerMobile.GetPlayer().Name),
-                        FileMode.OpenOrCreate, FileAccess.Write);
-                    StreamWriter sw = new StreamWriter(file);
-                    sw.WriteLine(endtimebox.Text);
-                    sw.WriteLine(homerunebox.Text);
-                    sw.WriteLine(bankrunebox.Text);
-                    sw.WriteLine(firstrunebox.Text);
-                    sw.WriteLine(lastrunebox.Text);
-                    sw.WriteLine(treeareatbox.Text);
-                    sw.WriteLine(comboBox1.Text);
-                    sw.WriteLine(Runebook.Serial);
-                    sw.WriteLine(axetextbox.Text);
-                    sw.WriteLine(Housecontainer.Serial);
-                    sw.WriteLine(Method);
-                    sw.Close();
+            FileStream file = new FileStream(string.Format("{0}.txt", PlayerMobile.GetPlayer().Name),
+                FileMode.OpenOrCreate, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(file);
+            sw.WriteLine(endtimebox.Text);
+            sw.WriteLine(homerunebox.Text);
+            sw.WriteLine(bankrunebox.Text);
+            sw.WriteLine(firstrunebox.Text);
+            sw.WriteLine(lastrunebox.Text);
+            sw.WriteLine(treeareatbox.Text);
+            sw.WriteLine(comboBox1.Text);
+            sw.WriteLine(Runebook.Serial);
+            sw.WriteLine(axetextbox.Text);
+            sw.WriteLine(Housecontainer.Serial);
+            sw.WriteLine(Method);
+            sw.Close();
             Stealth.Client.AddToSystemJournal("Save file written");
             loadbutton.Enabled = false;
         }
@@ -422,29 +419,29 @@ namespace TLumberjack
         {
             if (InvokeRequired)
             {
-                Invoke((MethodInvoker) delegate
-                {
-                    FileStream file = new FileStream(string.Format("{0}.txt", PlayerMobile.GetPlayer().Name),
-                        FileMode.OpenOrCreate, FileAccess.Read);
-                    StreamReader sr = new StreamReader(file);
-                    endtimebox.Text = sr.ReadLine();
-                    homerunebox.Text = sr.ReadLine();
-                    bankrunebox.Text = sr.ReadLine();
-                    firstrunebox.Text = sr.ReadLine();
-                    lastrunebox.Text = sr.ReadLine();
-                    treeareatbox.Text = sr.ReadLine();
-                    comboBox1.Text = sr.ReadLine();
-                    var runebook = sr.ReadLine();
-                    var axeSerial = sr.ReadLine();
-                    var housecontainer = sr.ReadLine();
-                    sr.Close();
-                    if (runebook != null) Runebook = new Item(uint.Parse(runebook));
-                    if (axeSerial != null) Lumbermethod.Theaxe = new UOEntity(uint.Parse(axeSerial));
-                    if (housecontainer != null) Housecontainer = new Item(uint.Parse(housecontainer));
-                    AxeSerial = Lumbermethod.Theaxe.Serial;
-                    Runebooktbox.Text = Runebook.Serial.ToString();
-                    axetextbox.Text = AxeSerial.ToString();
-                });
+                Invoke((MethodInvoker)delegate
+               {
+                   FileStream file = new FileStream(string.Format("{0}.txt", PlayerMobile.GetPlayer().Name),
+                       FileMode.OpenOrCreate, FileAccess.Read);
+                   StreamReader sr = new StreamReader(file);
+                   endtimebox.Text = sr.ReadLine();
+                   homerunebox.Text = sr.ReadLine();
+                   bankrunebox.Text = sr.ReadLine();
+                   firstrunebox.Text = sr.ReadLine();
+                   lastrunebox.Text = sr.ReadLine();
+                   treeareatbox.Text = sr.ReadLine();
+                   comboBox1.Text = sr.ReadLine();
+                   var runebook = sr.ReadLine();
+                   var axeSerial = sr.ReadLine();
+                   var housecontainer = sr.ReadLine();
+                   sr.Close();
+                   if (runebook != null) Runebook = new Runebook(uint.Parse(runebook),OSIconfig);
+                   if (axeSerial != null) Lumbermethod.Theaxe = new UOEntity(uint.Parse(axeSerial));
+                   if (housecontainer != null) Housecontainer = new Item(uint.Parse(housecontainer));
+                   AxeSerial = Lumbermethod.Theaxe.Serial;
+                   Runebooktbox.Text = Runebook.Serial.ToString();
+                   axetextbox.Text = AxeSerial.ToString();
+               });
             }
             else
             {
@@ -464,10 +461,10 @@ namespace TLumberjack
                     axetextbox.Text = sr.ReadLine().ToString();
                     var housecontainer = sr.ReadLine().ToString();
                     Method = sr.ReadLine().ToString();
-                    if (axetextbox.Text != null) AxeSerial = new Item(Convert.ToUInt32(axetextbox.Text,16)).Serial;
-                    if (housecontainer != null) Housecontainer = new Item(Convert.ToUInt32(housecontainer,16));
-                    if (Runebooktbox.Text != null) Runebook = new Item(Convert.ToUInt32(Runebooktbox.Text,16));
-               
+                    if (axetextbox.Text != null) AxeSerial = new Item(Convert.ToUInt32(axetextbox.Text, 16)).Serial;
+                    if (housecontainer != null) Housecontainer = new Item(Convert.ToUInt32(housecontainer, 16));
+                    if (Runebooktbox.Text != null) Runebook = new Runebook(Convert.ToUInt32(Runebooktbox.Text, 16),OSIconfig);
+
                 }
             }
             lumberjackbutton.Enabled = true;
