@@ -9,6 +9,7 @@ using ScriptSDK.Engines;
 using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
 using ScriptSDK.Targets;
+using System.ComponentModel;
 
 namespace TLumberjack
 {
@@ -21,6 +22,11 @@ namespace TLumberjack
         public static int Hw;
         public static int Blood;
         public static int Frost;
+        public static int Mahogany;
+        public static int Zircote;
+        public static int Pine;
+        public static int Ebony;
+        public static int Bamboo;
         public static int Amber;
         public static int Bark;
         public static int Switch;
@@ -29,7 +35,9 @@ namespace TLumberjack
         public static List<ushort> Extras = new List<ushort>();
         public static List<ushort> Lumbers = new List<ushort>();
         public static UOEntity Theaxe;
-
+        public static BackgroundWorker BG1 { get; set; }
+        public static BackgroundWorker BG2 { get; set; }
+        public static BackgroundWorker BG3 { get; set; }
 
 
 
@@ -69,30 +77,75 @@ namespace TLumberjack
 
         private static void LumberCount(Item log)
         {
+            
             var color = Stealth.Client.GetColor(log.Serial.Value);
-            switch (color)
+            if (Lumberjacker.Osi)
+                switch (color)
+                {
+                    case (ushort)LumberColor.Reg:
+                        Reg += log.Amount;
+                        break;
+                    case (ushort)LumberColor.Oak:
+                        Oak += log.Amount;
+                        break;
+                    case (ushort)LumberColor.Ash:
+                        Ash += log.Amount;
+                        break;
+                    case (ushort)LumberColor.Yew:
+                        Yew += log.Amount;
+                        break;
+                    case (ushort)LumberColor.HeartWood:
+                        Hw += log.Amount;
+                        break;
+                    case (ushort)LumberColor.Bloodwood:
+                        Blood += log.Amount;
+                        break;
+                    case (ushort)LumberColor.Frostwood:
+                        Frost += log.Amount;
+                        break;
+                }
+
+            else
             {
-                case (ushort)LumberColor.Reg:
-                    Reg += log.Amount;
-                    break;
-                case (ushort)LumberColor.Oak:
-                    Oak += log.Amount;
-                    break;
-                case (ushort)LumberColor.Ash:
-                    Ash += log.Amount;
-                    break;
-                case (ushort)LumberColor.Yew:
-                    Yew += log.Amount;
-                    break;
-                case (ushort)LumberColor.HeartWood:
-                    Hw += log.Amount;
-                    break;
-                case (ushort)LumberColor.Bloodwood:
-                    Blood += log.Amount;
-                    break;
-                case (ushort)LumberColor.Frostwood:
-                    Frost += log.Amount;
-                    break;
+                switch (color)
+                {
+                    case (ushort)EVOUOLumberColor.Reg:
+                        Reg += log.Amount;
+                        break;
+                    case (ushort)EVOUOLumberColor.Oak:
+                        Oak += log.Amount;
+                        break;
+                    case (ushort)EVOUOLumberColor.Ash:
+                        Ash += log.Amount;
+                        break;
+                    case (ushort)EVOUOLumberColor.Yew:
+                        Yew += log.Amount;
+                        break;
+                    case (ushort)EVOUOLumberColor.Heartwood:
+                        Hw += log.Amount;
+                        break;
+                    case (ushort)EVOUOLumberColor.Bloodwood:
+                        Blood += log.Amount;
+                        break;
+                    case (ushort)EVOUOLumberColor.Frostwood:
+                        Frost += log.Amount;
+                        break;
+                    case (ushort)EVOUOLumberColor.Zircote:
+                        Zircote += log.Amount;
+                        break;
+                    case (ushort)EVOUOLumberColor.Mohogany:
+                        Mahogany += log.Amount;
+                        break;
+                    case (ushort)EVOUOLumberColor.Pine:
+                        Pine += log.Amount;
+                        break;
+                    case (ushort)EVOUOLumberColor.Ebony:
+                        Ebony += log.Amount;
+                        break;
+                    case (ushort)EVOUOLumberColor.Bamboo:
+                        Bamboo += log.Amount;
+                        break;
+                }
             }
             Stealth.Client.AddToSystemJournal(string.Format("Dropping off {0} {1} lumber", log.Amount, (LumberColor)color));
         }
@@ -168,6 +221,26 @@ namespace TLumberjack
 
             //MoveLogs(mycontainer);
             //MoveBoards(mycontainer);
+            MoveItems(Extras, mycontainer.Serial.Value, Stealth.Client.GetBackpackID(), true);
+            MoveItems(Lumbers, mycontainer.Serial.Value, Stealth.Client.GetBackpackID(), true);
+            if (Lumberjacker.Beetle)
+            {
+                PlayerMobile.GetPlayer().DoubleClick();
+                Lumberjacker.BeetleContainer.DoubleClick();
+                MoveItems(Extras, mycontainer.Serial.Value, Lumberjacker.BeetleContainer.Serial.Value, true);
+                MoveItems(Lumbers, mycontainer.Serial.Value, Lumberjacker.BeetleContainer.Serial.Value, true);
+                Lumberjacker.BlueBeetle.DoubleClick();
+            }
+            if (Lumberjacker.backgroundWorker3 != null)
+            {
+                Lumberjacker.backgroundWorker3.RunWorkerAsync();
+            }
+        }
+        public static void BankUnload(Item mycontainer)
+        {
+            
+            Stealth.Client.Wait(1000);
+            Setvariables();
             MoveItems(Extras, mycontainer.Serial.Value, Stealth.Client.GetBackpackID(), true);
             MoveItems(Lumbers, mycontainer.Serial.Value, Stealth.Client.GetBackpackID(), true);
             if (Lumberjacker.Beetle)

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TLumberjack
+﻿namespace TLumberjack
 {
     public enum LumberItems : int
     {
@@ -30,6 +24,34 @@ namespace TLumberjack
         HeartWood = 0x4A9,
         Bloodwood = 0x4AA,
         Frostwood = 0x47F,
+    }
+    public enum EVOUOLumberColor : int
+    {
+        Reg = 0x0,
+        Yew = 0x501,
+        Oak = 0x1E8,
+        Ash = 0x3C1,
+        Heartwood = 0x72,
+        Bloodwood = 0x25,
+        Frostwood = 0x481,
+        Mohogany = 0x163,
+        Zircote = 0x4F7,
+        Bamboo = 0x480,
+        Ebony = 0x2B,
+        Pine = 0x4EE,
+    }
+    public enum EVOUOLeatherColor : int
+    {
+        Spined = 0x8AC,
+        Horned = 0x845,
+        Barbed = 0x851,
+        Polar = 0x47E,
+        Synthetic = 0x3FF,
+        Blaze = 0x4EC,
+        Daemonic = 0x20,
+        Shadow = 0x966,
+        Frost = 0x5D,
+        Ethereal = 0x487,
     }
     
 }
