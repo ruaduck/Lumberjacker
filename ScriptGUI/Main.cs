@@ -1,12 +1,12 @@
-﻿//////////////////////////////////////////////////////////////////////////
-// Script Name:  Duck Duck's Lumberjacker                               //
-// Verision : 1.0a                                                      //
-// Versiion Date: 9/7/15                                                //
-// Release Date:                                                        //
-// Special Thanks:  Crome for examples and ScriptSDK; Unisharp for      //
-//                  journal scanning                                    //
-// Authorized Release Locations:  www.scriptuo.com ; www.rebirthuo.com  //
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
+// Script Name:  Tidus Lumberjacker                                         //
+// Verision : 2.0                                                           //
+// Original Release Date: 9/7/15                                            //
+// Version Date: 5/2/21                                                     //
+// Special Thanks:  Crome for examples and ScriptSDK; Unisharp for          //
+//                  journal scanning                                        //
+// Authorized Release Locations:  www.scriptuo.com ; www.github.com/ruaduck //
+//////////////////////////////////////////////////////////////////////////////
 
 using System;
 using System.ComponentModel;
@@ -19,12 +19,14 @@ using ScriptSDK;
 using ScriptSDK.Engines;
 using ScriptSDK.Items;
 using ScriptSDK.Mobiles;
-
+using System.Collections.Generic;
 
 namespace TLumberjack
 {
     public partial class Lumberjacker : Form
     {
+        public static List<LumberjackerSave> Saves = new List<LumberjackerSave>();
+        public static LumberjackerSave Save;
         public static string Method = "Not Set";
         public static Item Housecontainer;
         public Serial AxeSerial;
@@ -51,6 +53,7 @@ namespace TLumberjack
         public static int Treearea { get; set; }
         public static BackgroundWorker backgroundWorker1 = new BackgroundWorker();
         public static BackgroundWorker backgroundWorker3 = new BackgroundWorker();
+
         private void InitializeBackgroundWorker()
         {
             backgroundWorker1.WorkerSupportsCancellation = true;
@@ -59,6 +62,7 @@ namespace TLumberjack
             backgroundWorker3.DoWork +=
                  new DoWorkEventHandler(backgroundWorker3_DoWork);
         }
+        
         public Lumberjacker()
         {
 
@@ -75,10 +79,35 @@ namespace TLumberjack
                 maxweighttbox.Text = Convert.ToString(30);
                 cancelbutton.Enabled = false;
                 lumberjackbutton.Enabled = false;
-                loadbutton.Enabled = true;
-                savebutton.Enabled = false;
-                startsetup.Enabled = false;
+                startsetup.Enabled = true;
                 #endregion
+                LoadSaves();
+            }
+            else
+            {
+                MessageBox.Show("Please run as administrator.");
+                Environment.Exit(1);
+            }
+        }
+        public bool SetInputs()
+        {
+            Invoke((MethodInvoker)
+                delegate { Osi = comboBox1.Text == @"OSI"; });
+            if (endtimebox == null || homerunebox == null || bankrunebox == null || firstrunebox == null ||
+                lastrunebox == null) { return false; }
+            return true;
+        }
+        public void Setup()
+        {
+            if (SetInputs())
+            {
+                Minutes = Convert.ToInt32(endtimebox.Text);
+                Homerune = Convert.ToInt32(homerunebox.Text);
+                Bankrune = Convert.ToInt32(bankrunebox.Text);
+                Firstrune = Convert.ToInt32(firstrunebox.Text);
+                Lastrune = Convert.ToInt32(lastrunebox.Text);
+                MaxWeight = Convert.ToInt32(maxweighttbox.Text);
+                Treearea = Convert.ToInt32(treeareatbox.Text);
                 #region Use Beetle?
                 var BeetleDialogResult =
                 MessageBox.Show("Do you have a Blue Beetle?",
@@ -110,31 +139,9 @@ namespace TLumberjack
                         break;
                 }
                 #endregion
+                if (!backgroundWorker2.IsBusy) backgroundWorker2.RunWorkerAsync();
             }
-            else
-            {
-                MessageBox.Show("Please run as administrator.");
-                Environment.Exit(1);
-            }
-        }
-        public bool SetInputs()
-        {
-            Invoke((MethodInvoker)
-                delegate { Osi = comboBox1.Text == @"OSI"; });
-            if (endtimebox == null || homerunebox == null || bankrunebox == null || firstrunebox == null ||
-                lastrunebox == null) { return false; }
-            return true;
-        }
-        public void Setup()
-        {
-            Minutes = Convert.ToInt32(endtimebox.Text);
-            Homerune = Convert.ToInt32(homerunebox.Text);
-            Bankrune = Convert.ToInt32(bankrunebox.Text);
-            Firstrune = Convert.ToInt32(firstrunebox.Text);
-            Lastrune = Convert.ToInt32(lastrunebox.Text);
-            MaxWeight = Convert.ToInt32(maxweighttbox.Text);
-            Treearea = Convert.ToInt32(treeareatbox.Text);
-            if (!backgroundWorker2.IsBusy) backgroundWorker2.RunWorkerAsync();
+            else MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
         }
         private void button3_Click(object sender, EventArgs e)
         {
@@ -150,10 +157,10 @@ namespace TLumberjack
                 if (!Osi)
                 {
                     label24.Text = "Ebony";
-                    label23.Text = "Mahogany";
-                    label22.Text = "Pine";
-                    label21.Text = "Zircote";
-                    label20.Text = "Bamboo";
+                    label23.Text = "Mahogany"; //plant
+                    label22.Text = "Pine"; //fungi
+                    label21.Text = "Zircote"; //switch
+                    label20.Text = "Bamboo";  //bark
                 }
                 else
                 {
@@ -163,14 +170,11 @@ namespace TLumberjack
                     label21.Text = "Switch";
                     label20.Text = "Plant";
                 }
-                //Runebook.Parse();
                 Starttime = DateTime.Now;
                 Endtime = DateTime.Now.AddMinutes((Minutes));
                 Start();
                 cancelbutton.Enabled = true;
                 lumberjackbutton.Enabled = false;
-                loadbutton.Enabled = false;
-                savebutton.Enabled = false;
             }
             else MessageBox.Show(@"You missed some required fields or didn't enter in digits in those fields");
         }
@@ -380,10 +384,10 @@ namespace TLumberjack
             Invoke((MethodInvoker)
                 delegate
                 {
-                    savebutton.Enabled = true;
                     lumberjackbutton.Enabled = true;
                 });
             Clearcounts();
+            SaveInfo();
         }
 
         private static void Clearcounts()
@@ -423,7 +427,6 @@ namespace TLumberjack
                {
                    Text = PlayerMobile.GetPlayer().Name + @" - Lumberjacker";
                    lumberjackbutton.Enabled = true;
-                   savebutton.Enabled = true;
                });
             }
 
@@ -498,10 +501,10 @@ namespace TLumberjack
                        regbox.Text = Lumbermethod.Reg.ToString();
                        frostbox.Text = Lumbermethod.Frost.ToString();
                        amberbox.Text = Lumbermethod.Ebony.ToString(); //Amber
-                       fungibox.Text = Lumbermethod.Mahogany.ToString(); //Fungi
-                       barkbox.Text = Lumbermethod.Pine.ToString(); //Bark
+                       fungibox.Text = Lumbermethod.Pine.ToString(); //Fungi
+                       barkbox.Text = Lumbermethod.Bamboo.ToString(); //Bark
                        switchbox.Text = Lumbermethod.Zircote.ToString(); //Switch
-                       plantbox.Text = Lumbermethod.Bamboo.ToString(); //Plant
+                       plantbox.Text = Lumbermethod.Mahogany.ToString(); //Plant
                        avghr.Text = Avgperhour().ToString();
                    }
                });
@@ -543,79 +546,157 @@ namespace TLumberjack
                 }
             }
         }
-
-        private void savebutton_Click(object sender, EventArgs e)
+        private static void OutputToCSV()
         {
-            FileStream file = new FileStream(string.Format("{0}.txt", PlayerMobile.GetPlayer().Name),
-                FileMode.OpenOrCreate, FileAccess.Write);
-            StreamWriter sw = new StreamWriter(file);
-            sw.WriteLine(endtimebox.Text);
-            sw.WriteLine(homerunebox.Text);
-            sw.WriteLine(bankrunebox.Text);
-            sw.WriteLine(firstrunebox.Text);
-            sw.WriteLine(lastrunebox.Text);
-            sw.WriteLine(treeareatbox.Text);
-            sw.WriteLine(comboBox1.Text);
-            sw.WriteLine(Runebook.Serial);
-            sw.WriteLine(axetextbox.Text);
-            sw.WriteLine(Housecontainer.Serial);
-            sw.WriteLine(Method);
-            sw.Close();
-            Stealth.Client.AddToSystemJournal("Save file written");
-            loadbutton.Enabled = false;
+
+            string newFileName = $@"{Application.StartupPath}\Saves.csv";
+            if (File.Exists(newFileName))
+            {
+                File.Delete(newFileName);
+            }
+            foreach (var save in Saves)
+            {
+                string mytext = $"{save.Player},{save.Shard},{save.BankCrystal},{save.Bankrune},{save.Bankstorage},{save.Beetle},{save.BeetleContainer},{save.Firstrune}," +
+                    $"{save.Homerune},{save.Lastrune},{save.MaxWeight},{save.Minutes},{save.Osi},{save.Treearea},{save.Axe},{save.Runebook},{save.Housecontainer},{save.Method}{Environment.NewLine}";
+                File.AppendAllText(newFileName, mytext);
+            }
+        }
+        private void SaveInfo()
+        {
+            Save.Player = PlayerMobile.GetPlayer().Name;
+            Save.Shard = Stealth.Client.GetShardName();
+            Save.BankCrystal = BankCrystal;
+            Save.Bankrune = Bankrune;
+            Save.Bankstorage = bankstorage.Serial;
+            Save.Beetle = Beetle;
+            if (Save.BeetleContainer == null) Save.BeetleContainer = new Serial(0);
+            else Save.BeetleContainer = BeetleContainer.Serial;
+            Save.Firstrune = Firstrune;
+            Save.Homerune = Homerune;
+            Save.Lastrune = Lastrune;
+            Save.MaxWeight = MaxWeight;
+            Save.Minutes = Minutes;
+            Save.Osi = Osi;
+            Save.Treearea = Treearea;
+            Save.Axe = AxeSerial;
+            Save.Runebook = Runebook.Serial;
+            Save.Housecontainer = Housecontainer.Serial;
+            Save.Method = Method;
+
+            if (!Saves.Contains(Save))
+                Saves.Add(Save);
+            OutputToCSV();
+        }
+        
+        private void LoadSaves()
+        {
+            string newFileName = $@"{Application.StartupPath}\Saves.csv";
+            if (File.Exists(newFileName))
+            {
+                using (StreamReader sr = new StreamReader(newFileName))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        LumberjackerSave save;
+
+                        string[] rows = sr.ReadLine().Split(',');
+                        save.Player = rows[0];
+                        save.Shard = rows[1];
+                        save.BankCrystal = bool.Parse(rows[2]);
+                        save.Bankrune = int.Parse(rows[3]);
+                        save.Bankstorage = new Serial(Convert.ToUInt32(rows[4],16));
+                        save.Beetle = bool.Parse(rows[5]);
+                        save.BeetleContainer = new Serial(Convert.ToUInt32(rows[6],16));
+                        save.Firstrune = int.Parse(rows[7]);
+                        save.Homerune = int.Parse(rows[8]);
+                        save.Lastrune = int.Parse(rows[9]);
+                        save.MaxWeight = int.Parse(rows[10]);
+                        save.Minutes = int.Parse(rows[11]);
+                        save.Osi = bool.Parse(rows[12]);
+                        save.Treearea = int.Parse(rows[13]);
+                        save.Axe = new Serial(Convert.ToUInt32(rows[14],16));
+                        save.Runebook = new Serial(Convert.ToUInt32(rows[15],16));
+                        save.Housecontainer = new Serial(Convert.ToUInt32(rows[16],16));
+                        save.Method = rows[17];
+                        if (save.Player == PlayerMobile.GetPlayer().Name && save.Shard == Stealth.Client.GetShardName())
+                        {
+                            Save = save;
+                            LoadSave();
+                        }
+                        
+                        else
+                        { Saves.Add(save); }
+                    }
+
+                }
+            }
         }
 
-        private void loadbutton_Click(object sender, EventArgs e)
+        private void LoadSave()
         {
             if (InvokeRequired)
             {
                 Invoke((MethodInvoker)delegate
-               {
-                   FileStream file = new FileStream(string.Format("{0}.txt", PlayerMobile.GetPlayer().Name),
-                       FileMode.OpenOrCreate, FileAccess.Read);
-                   StreamReader sr = new StreamReader(file);
-                   endtimebox.Text = sr.ReadLine();
-                   homerunebox.Text = sr.ReadLine();
-                   bankrunebox.Text = sr.ReadLine();
-                   firstrunebox.Text = sr.ReadLine();
-                   lastrunebox.Text = sr.ReadLine();
-                   treeareatbox.Text = sr.ReadLine();
-                   comboBox1.Text = sr.ReadLine();
-                   var runebook = sr.ReadLine();
-                   var axeSerial = sr.ReadLine();
-                   var housecontainer = sr.ReadLine();
-                   sr.Close();
-                   if (runebook != null) Runebook = new Runebook(uint.Parse(runebook),OSIconfig);
-                   if (axeSerial != null) Lumbermethod.Theaxe = new UOEntity(uint.Parse(axeSerial));
-                   if (housecontainer != null) Housecontainer = new Item(uint.Parse(housecontainer));
-                   AxeSerial = Lumbermethod.Theaxe.Serial;
-                   Runebooktbox.Text = Runebook.Serial.ToString();
-                   axetextbox.Text = AxeSerial.ToString();
-               });
+                {
+                    endtimebox.Text = Save.Minutes.ToString();
+                    homerunebox.Text = Save.Homerune.ToString();
+                    bankrunebox.Text = Save.Bankrune.ToString();
+                    firstrunebox.Text = Save.Firstrune.ToString();
+                    lastrunebox.Text = Save.Lastrune.ToString();
+                    treeareatbox.Text = Save.Treearea.ToString();
+                    if (Save.Osi)
+                    {
+                        //comboBox1.Text = "OSI";
+                        Runebook = new Runebook(Save.Runebook, OSIconfig, (uint)RunebookGumps.OSI);
+                    }
+                    else
+                    {
+                        //comboBox1.Text = "UOEvolution";
+                        Runebook = new Runebook(Save.Runebook, UOEVO, (uint)RunebookGumps.EVO);                        
+                    }
+                    Runebook.Parse();
+                    Lumbermethod.Theaxe = new UOEntity(Save.Axe);
+                    AxeSerial = Save.Axe;
+                    Housecontainer = new Item(Save.Housecontainer);
+                    Method = Save.Method;
+                    BankCrystal = Save.BankCrystal;
+                    Beetle = Save.Beetle;
+                    BeetleContainer = new ScriptSDK.Items.Container(Save.BeetleContainer);
+                    bankstorage = new Item(Save.Bankstorage);
+                    Runebooktbox.Text = Runebook.Serial.ToString();
+                    axetextbox.Text = AxeSerial.ToString();
+                });
             }
             else
             {
-                var tempname = PlayerMobile.GetPlayer().Name;
-                FileStream file = new FileStream(string.Format("{0}.txt", tempname),
-                FileMode.OpenOrCreate, FileAccess.Read);
-                using (var sr = new StreamReader(file))
+                endtimebox.Text = Save.Minutes.ToString();
+                homerunebox.Text = Save.Homerune.ToString();
+                bankrunebox.Text = Save.Bankrune.ToString();
+                firstrunebox.Text = Save.Firstrune.ToString();
+                lastrunebox.Text = Save.Lastrune.ToString();
+                treeareatbox.Text = Save.Treearea.ToString();
+                if (Save.Osi)
                 {
-                    endtimebox.Text = sr.ReadLine();
-                    homerunebox.Text = sr.ReadLine();
-                    bankrunebox.Text = sr.ReadLine();
-                    firstrunebox.Text = sr.ReadLine();
-                    lastrunebox.Text = sr.ReadLine();
-                    treeareatbox.Text = sr.ReadLine();
-                    comboBox1.Text = sr.ReadLine();
-                    Runebooktbox.Text = sr.ReadLine().ToString();
-                    axetextbox.Text = sr.ReadLine().ToString();
-                    var housecontainer = sr.ReadLine().ToString();
-                    Method = sr.ReadLine().ToString();
-                    if (axetextbox.Text != null) AxeSerial = new Item(Convert.ToUInt32(axetextbox.Text, 16)).Serial;
-                    if (housecontainer != null) Housecontainer = new Item(Convert.ToUInt32(housecontainer, 16));
-                    if (Runebooktbox.Text != null) Runebook = new Runebook(Convert.ToUInt32(Runebooktbox.Text, 16),OSIconfig);
-
+                    //comboBox1.Text = "OSI";
+                    Runebook = new Runebook(Save.Runebook, OSIconfig, (uint)RunebookGumps.OSI);
                 }
+                else
+                {
+                    //comboBox1.Text = "UOEvolution";
+                    Runebook = new Runebook(Save.Runebook, UOEVO, (uint)RunebookGumps.EVO);
+                }
+                Runebook.Parse();
+                Lumbermethod.Theaxe = new UOEntity(Save.Axe);
+                AxeSerial = Save.Axe;
+                Housecontainer = new Item(Save.Housecontainer);
+                Method = Save.Method;
+                BankCrystal = Save.BankCrystal;
+                Beetle = Save.Beetle;
+                BeetleContainer = new ScriptSDK.Items.Container(Save.BeetleContainer);
+                bankstorage = new Item(Save.Bankstorage);
+                Runebooktbox.Text = Runebook.Serial.ToString();
+                axetextbox.Text = AxeSerial.ToString();
+
             }
             lumberjackbutton.Enabled = true;
             startsetup.Enabled = false;

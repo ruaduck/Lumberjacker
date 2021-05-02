@@ -57,7 +57,10 @@ namespace TLumberjack
             var logs = Scanner.Find<Item>((ushort)Lumber.Logs, 0xFFFF, Stealth.Client.GetBackpackID(), true);
             foreach (var log in logs)
             {
-                Stealth.Client.AddToSystemJournal(String.Format("Converting {0} Logs to boards", (LumberColor)log.Color));
+                if (Lumberjacker.Osi)
+                    Stealth.Client.AddToSystemJournal(String.Format("Converting {0} Logs({1}) to boards", (LumberColor)log.Color,log.Amount));
+                else
+                { Stealth.Client.AddToSystemJournal(String.Format("Converting {0} Logs({1}) to boards", (EVOUOLumberColor)log.Color, log.Amount)); }
                 player.Paperdoll.TwoHanded.DoubleClick();
                 var target = new EntityTarget(1000);
                 target.Action(log);
@@ -77,9 +80,10 @@ namespace TLumberjack
 
         private static void LumberCount(Item log)
         {
-            
+
             var color = Stealth.Client.GetColor(log.Serial.Value);
             if (Lumberjacker.Osi)
+            { 
                 switch (color)
                 {
                     case (ushort)LumberColor.Reg:
@@ -104,7 +108,8 @@ namespace TLumberjack
                         Frost += log.Amount;
                         break;
                 }
-
+            Stealth.Client.AddToSystemJournal(string.Format("Dropping off {0} {1} lumber", log.Amount, (LumberColor)color));
+            }
             else
             {
                 switch (color)
@@ -146,8 +151,9 @@ namespace TLumberjack
                         Bamboo += log.Amount;
                         break;
                 }
+                Stealth.Client.AddToSystemJournal(string.Format("Dropping off {0} {1} lumber", log.Amount, (EVOUOLumberColor)color));
             }
-            Stealth.Client.AddToSystemJournal(string.Format("Dropping off {0} {1} lumber", log.Amount, (LumberColor)color));
+            
         }
         private static void LumberItemCount(Item item)
         {

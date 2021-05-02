@@ -53,5 +53,10 @@
         Frost = 0x5D,
         Ethereal = 0x487,
     }
-    
+    public enum RunebookGumps : uint
+    {
+        OSI = 0x0059,
+        EVO = 0x554B87F3,
+    }
+
 }
